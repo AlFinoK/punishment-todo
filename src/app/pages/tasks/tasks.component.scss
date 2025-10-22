@@ -1,0 +1,20 @@
+@use "vars" as *;
+@use "mixins";
+
+.tasks {
+  display: flex;
+  align-items: start;
+  background-color: $dashboard-bg;
+  border-radius: 8px;
+  height: 100%;
+  border: 1px solid $primary-border;
+
+  .navbar {
+    height: inherit;
+    min-width: 210px;
+  }
+
+  .content {
+    width: 100%;
+  }
+}

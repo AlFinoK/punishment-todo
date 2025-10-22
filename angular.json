@@ -26,9 +26,10 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/app/shared/styles/index.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/app/shared/styles"]
+            }
           },
           "configurations": {
             "production": {
@@ -80,9 +81,10 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "styles": ["src/app/shared/styles/index.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/app/shared/styles"]
+            }
           }
         }
       }

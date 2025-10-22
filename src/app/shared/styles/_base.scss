@@ -1,0 +1,11 @@
+@use "vars" as *;
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 400;
+  font-style: normal;
+  color: $primary-color;
+}

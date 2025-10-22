@@ -1,0 +1,33 @@
+@use "vars" as *;
+@use "mixins";
+
+.badge {
+  padding: 1px 9px;
+  border-radius: 16px;
+
+  .text {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+  }
+
+  &.productivity {
+    background-color: $secondary-blue;
+    color: $primary-purple;
+  }
+
+  &.education {
+    background-color: $secondary-green;
+    color: $primary-green;
+  }
+
+  &.health {
+    background-color: $secondary-orange;
+    color: $primary-orange;
+  }
+
+  &.urgently {
+    background-color: $secondary-red;
+    color: $primary-red;
+  }
+}

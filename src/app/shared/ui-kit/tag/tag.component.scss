@@ -1,0 +1,41 @@
+@use "vars" as *;
+@use "mixins";
+
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  width: max-content;
+
+  .circle {
+    height: 10px;
+    width: 10px;
+    border-radius: 50px;
+
+    &.purple {
+      background-color: $primary-purple;
+    }
+
+    &.red {
+      background-color: $primary-red;
+    }
+
+    &.green {
+      background-color: $primary-green;
+    }
+
+    &.orange {
+      background-color: $primary-orange;
+    }
+  }
+
+  .text {
+    color: $white;
+    font-weight: 500;
+
+    &:hover {
+      color: $primary-gray;
+    }
+  }
+}

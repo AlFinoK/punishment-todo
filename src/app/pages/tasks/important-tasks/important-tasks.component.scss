@@ -1,0 +1,6 @@
+@use "vars" as *;
+@use "mixins";
+
+.main-page {
+  background-color: $dashboard-bg;
+}

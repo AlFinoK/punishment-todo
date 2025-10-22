@@ -1,0 +1,23 @@
+<button
+  class="button"
+  [class.primary]="variant() === buttonVariantEnum.PRIMARY"
+  [class.outline]="variant() === buttonVariantEnum.OUTLINE"
+  [class.clear]="variant() === buttonVariantEnum.CLEAR"
+  [class.none]="size() === buttonSizeEnum.NONE"
+  [class.sm]="size() === buttonSizeEnum.SM"
+  [class.md]="size() === buttonSizeEnum.MD"
+  [class.lg]="size() === buttonSizeEnum.LG"
+  [class.loading]="isLoading()"
+  [class.disabled]="disabled()"
+  [disabled]="disabled()"
+  type="{{ type() }}"
+  (click)="onButtonClick()"
+>
+  <p class="content">
+    @if(isLoading()) {
+    {{ "Loading..." }}
+    } @else {
+    <ng-content></ng-content>
+    }
+  </p>
+</button>

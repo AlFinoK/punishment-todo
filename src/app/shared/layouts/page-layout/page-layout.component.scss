@@ -1,0 +1,8 @@
+@use "vars" as *;
+
+.page-layout {
+  background-color: $bg;
+  height: 100vh;
+  width: 100vw;
+  padding: 7% 10%;
+}

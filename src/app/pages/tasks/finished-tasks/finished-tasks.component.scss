@@ -1,0 +1,6 @@
+@use "vars" as *;
+@use "mixins";
+
+.finished-tasks {
+  background-color: $dashboard-bg;
+}

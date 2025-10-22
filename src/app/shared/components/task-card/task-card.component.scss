@@ -1,0 +1,33 @@
+@use "vars" as *;
+@use "mixins";
+
+.task-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border: 1px solid $primary-border;
+
+  .left {
+  }
+
+  .left,
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .right {
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .badges {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
