@@ -5,6 +5,8 @@ import {
   InputSignal,
 } from '@angular/core';
 
+import type { TaskFeaturesInterface } from '@pages/tasks';
+
 import { BadgeTypeEnum } from './core';
 
 @Component({
@@ -16,9 +18,10 @@ import { BadgeTypeEnum } from './core';
 export class BadgeComponent {
   protected readonly badgeTypeEnum: typeof BadgeTypeEnum = BadgeTypeEnum;
 
-  public badgeType: InputSignal<string> = input<string>(
-    this.badgeTypeEnum.PRODUCTIVITY
-  );
+  public badgeType: InputSignal<TaskFeaturesInterface> =
+    input<TaskFeaturesInterface>({
+      feature: this.badgeTypeEnum.PRODUCTIVITY,
+    });
 
   constructor() {}
 }

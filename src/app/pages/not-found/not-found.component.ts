@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ButtonComponent } from '@shared/ui-kit/button';
-import { ButtonVariantEnum } from '@shared/ui-kit/button/core/enum';
+
+import { ButtonComponent, ButtonVariantEnum } from '@shared/components';
 
 @Component({
   selector: 'app-not-found',

@@ -1,3 +1,3 @@
-export * from './navbar';
-export * from './search-filter';
-export * from './tasks-list';
+export * from './tag';
+export * from './button';
+export * from './badge';

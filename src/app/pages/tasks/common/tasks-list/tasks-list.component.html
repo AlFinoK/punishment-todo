@@ -1,0 +1,5 @@
+<section class="tasks-list">
+  @for (task of tasks; track $index) {
+  <app-task-card id="{{ task.id }}" [task]="task" />
+  }
+</section>

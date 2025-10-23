@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 
 import {
-  TagComponent,
   ButtonComponent,
-  TagColorEnum,
-  TagTypeEnum,
   ButtonSizeEnum,
   ButtonVariantEnum,
-} from '@shared/ui-kit';
+  TagColorEnum,
+  TagComponent,
+  TagTypeEnum,
+} from '@shared/components';
 
 @Component({
   selector: 'app-navbar',

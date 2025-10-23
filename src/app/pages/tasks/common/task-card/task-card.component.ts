@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
+import { Component, input, InputSignal } from '@angular/core';
 
 import {
   BadgeComponent,
@@ -6,8 +7,9 @@ import {
   ButtonComponent,
   ButtonSizeEnum,
   ButtonVariantEnum,
-} from '@shared/ui-kit';
-import { LucideAngularModule } from 'lucide-angular';
+} from '@shared/components';
+
+import { TaskInterface } from './core';
 
 @Component({
   selector: 'app-task-card',
@@ -20,6 +22,10 @@ export class TaskCardComponent {
   protected readonly buttonSizeEnum: typeof ButtonSizeEnum = ButtonSizeEnum;
   protected readonly buttonVariantEnum: typeof ButtonVariantEnum =
     ButtonVariantEnum;
+
+  public task: InputSignal<TaskInterface | null> = input<TaskInterface | null>(
+    null
+  );
 
   constructor() {}
 }

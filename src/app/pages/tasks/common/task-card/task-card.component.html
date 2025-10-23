@@ -1,20 +1,19 @@
 <div class="task-card">
   <div class="left">
-    <input type="checkbox" />
-    <p class="title">
-      Прочитать книгу Роберта Киосаки “Богатый папа. Бедный папа”.
-    </p>
+    <input class="checkbox" type="checkbox" />
+
+    <p class="title">{{ task()?.title }}</p>
   </div>
 
   <div class="right">
+    @for (feature of task()?.features; track task()?.id) {
     <div class="badges">
-      <app-badge [badgeType]="badgeTypeEnum.PRODUCTIVITY" />
-      <app-badge [badgeType]="badgeTypeEnum.EDUCATION" />
-      <app-badge [badgeType]="badgeTypeEnum.URGENTLY" />
+      <app-badge [id]="task()?.id" [badgeType]="feature" />
     </div>
+    }
 
     <div class="time">
-      <p class="date">00:57 / 02.09.2022</p>
+      <p class="date">{{ task()?.created_at }}</p>
     </div>
 
     <app-button

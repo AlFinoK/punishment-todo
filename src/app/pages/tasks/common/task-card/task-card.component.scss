@@ -9,6 +9,11 @@
   border: 1px solid $primary-border;
 
   .left {
+    .checkbox {
+      accent-color: $primary-purple;
+      width: 18px;
+      height: 18px;
+    }
   }
 
   .left,

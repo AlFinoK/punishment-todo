@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { PageLayoutComponent } from '@shared/layouts';
+import { PageLayoutComponent } from '@pages/tasks';
 
 @Component({
   selector: 'app-root',

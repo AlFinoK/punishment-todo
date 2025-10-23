@@ -1,16 +1,16 @@
-@if(badgeType() === badgeTypeEnum.PRODUCTIVITY) {
+@if(badgeType().feature === badgeTypeEnum.PRODUCTIVITY) {
 <div class="badge productivity">
   <p class="text">Productivity</p>
 </div>
-} @if(badgeType() === badgeTypeEnum.EDUCATION) {
+} @if(badgeType().feature === badgeTypeEnum.EDUCATION) {
 <div class="badge education">
   <p class="text">Education</p>
 </div>
-} @if(badgeType() === badgeTypeEnum.HEALTH) {
+} @if(badgeType().feature === badgeTypeEnum.HEALTH) {
 <div class="badge health">
   <p class="text">Health</p>
 </div>
-} @if(badgeType() === badgeTypeEnum.URGENTLY) {
+} @if(badgeType().feature === badgeTypeEnum.URGENTLY) {
 <div class="badge urgently">
   <p class="text">Urgently</p>
 </div>

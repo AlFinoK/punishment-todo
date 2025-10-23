@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TaskCardComponent } from '../task-card';
+import { TaskInterface } from '../task-card/core';
 
 @Component({
   selector: 'app-tasks-list',
@@ -8,4 +9,6 @@ import { TaskCardComponent } from '../task-card';
   imports: [TaskCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksListComponent {}
+export class TasksListComponent {
+  protected tasks: TaskInterface[] = [];
+}

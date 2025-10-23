@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { NavbarComponent, SearchFilterComponent } from '@shared/components';
+import { NavbarComponent, SearchFilterComponent } from './common';
 
 @Component({
   selector: 'app-tasks',
