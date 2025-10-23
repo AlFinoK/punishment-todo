@@ -1,19 +1,19 @@
 <div class="tag" (click)="onTagClick()">
   <div
     class="circle"
-    [class.purple]="tagColor() === tagColorEnum.PURPLE"
-    [class.red]="tagColor() === tagColorEnum.RED"
-    [class.green]="tagColor() === tagColorEnum.GREEN"
-    [class.orange]="tagColor() === tagColorEnum.ORANGE"
+    [class.purple]="tagColor() === 'purple'"
+    [class.red]="tagColor() === 'red'"
+    [class.green]="tagColor() === 'green'"
+    [class.orange]="tagColor() === 'orange'"
   ></div>
 
-  @if(tagType() === tagTypeEnum.PRODUCTIVITY) {
+  @if(tagValue() === 'productivity') {
   <p class="text">Productivity</p>
-  } @if(tagType() === tagTypeEnum.EDUCATION) {
+  } @if(tagValue() === 'education') {
   <p class="text">Education</p>
-  } @if(tagType() === tagTypeEnum.HEALTH) {
+  } @if(tagValue() === 'health') {
   <p class="text">Health</p>
-  } @if(tagType() === tagTypeEnum.URGENTLY) {
+  } @if(tagValue() === 'urgently') {
   <p class="text">Urgently</p>
   }
 </div>

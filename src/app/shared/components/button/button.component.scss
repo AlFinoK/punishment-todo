@@ -15,21 +15,21 @@
   }
 
   &.primary {
-    background-color: $primary-purple;
+    background-color: $purple;
     color: $white;
     border: none;
     &:hover {
-      background-color: $primary-purple-hover;
+      background-color: $purple-hover;
     }
   }
 
   &.outline {
     background-color: transparent;
-    color: $primary-purple;
-    border: 1px solid $primary-purple;
+    color: $purple;
+    border: 1px solid $purple;
     &:hover {
-      border: 1px solid $primary-purple-hover;
-      color: $primary-purple-hover;
+      border: 1px solid $purple-hover;
+      color: $purple-hover;
     }
   }
 

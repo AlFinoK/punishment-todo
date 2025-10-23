@@ -12,22 +12,22 @@
   }
 
   &.productivity {
-    background-color: $secondary-blue;
-    color: $primary-purple;
+    background-color: $purple-opacity;
+    color: $purple;
   }
 
   &.education {
-    background-color: $secondary-green;
-    color: $primary-green;
+    background-color: $success-opacity;
+    color: $success;
   }
 
   &.health {
-    background-color: $secondary-orange;
-    color: $primary-orange;
+    background-color: $danger-opacity;
+    color: $danger;
   }
 
   &.urgently {
-    background-color: $secondary-red;
-    color: $primary-red;
+    background-color: $negative-opacity;
+    color: $negative;
   }
 }

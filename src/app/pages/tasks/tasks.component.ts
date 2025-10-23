@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { NavbarComponent, SearchFilterComponent } from './common';
+import { NavbarComponent } from './common';
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.scss',
-  imports: [RouterOutlet, SearchFilterComponent, NavbarComponent],
+  imports: [RouterOutlet, NavbarComponent],
 })
 export class TasksComponent {}

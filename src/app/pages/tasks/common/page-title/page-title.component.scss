@@ -1,0 +1,12 @@
+@use "vars" as *;
+@use "mixins";
+
+.page-title {
+  padding: 18px 20px;
+  border: 1px solid $primary-border;
+
+  .text {
+    font-size: 19px;
+    line-height: 21px;
+  }
+}

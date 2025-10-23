@@ -8,7 +8,7 @@
   <div class="right">
     @for (feature of task()?.features; track task()?.id) {
     <div class="badges">
-      <app-badge [id]="task()?.id" [badgeType]="feature" />
+      <app-badge [id]="task()?.id" [badgeValue]="feature" />
     </div>
     }
 
@@ -16,17 +16,11 @@
       <p class="date">{{ task()?.created_at }}</p>
     </div>
 
-    <app-button
-      [size]="buttonSizeEnum.NONE"
-      [variant]="buttonVariantEnum.CLEAR"
-    >
+    <app-button [size]="'none'" [variant]="'clear'">
       <lucide-icon class="icon" name="trash" />
     </app-button>
 
-    <app-button
-      [size]="buttonSizeEnum.NONE"
-      [variant]="buttonVariantEnum.CLEAR"
-    >
+    <app-button [size]="'none'" [variant]="'clear'">
       <lucide-icon class="icon" name="grip-vertical" />
     </app-button>
   </div>

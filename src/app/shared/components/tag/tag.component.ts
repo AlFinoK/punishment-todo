@@ -6,9 +6,7 @@ import {
   output,
   OutputEmitterRef,
 } from '@angular/core';
-
-import { TagColorEnum } from './core/enum';
-import { TagTypeEnum } from './core/enum/tag-type.enum';
+import { TagColorType, TagValueType } from './core';
 
 @Component({
   selector: 'app-tag',
@@ -17,15 +15,12 @@ import { TagTypeEnum } from './core/enum/tag-type.enum';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagComponent {
-  protected readonly tagColorEnum: typeof TagColorEnum = TagColorEnum;
-  protected readonly tagTypeEnum: typeof TagTypeEnum = TagTypeEnum;
+  protected readonly tagColorType: TagColorType = 'purple';
+  protected readonly tagValueType: TagValueType = 'productivity';
 
-  public tagColor: InputSignal<string> = input<string>(
-    this.tagColorEnum.PURPLE
-  );
-  public tagType: InputSignal<string> = input<string>(
-    this.tagTypeEnum.PRODUCTIVITY
-  );
+  public tagColor: InputSignal<TagColorType> = input<TagColorType>('purple');
+  public tagValue: InputSignal<TagValueType> =
+    input<TagValueType>('productivity');
   public tagClick: OutputEmitterRef<void> = output<void>();
 
   onTagClick(): void {

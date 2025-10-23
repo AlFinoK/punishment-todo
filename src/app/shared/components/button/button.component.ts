@@ -6,8 +6,7 @@ import {
   output,
   OutputEmitterRef,
 } from '@angular/core';
-
-import { ButtonSizeEnum, ButtonTypeEnum, ButtonVariantEnum } from './core/enum';
+import { ButtonSizeType, ButtonVariantType } from './core';
 
 @Component({
   selector: 'app-button',
@@ -16,18 +15,12 @@ import { ButtonSizeEnum, ButtonTypeEnum, ButtonVariantEnum } from './core/enum';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
-  protected readonly buttonSizeEnum: typeof ButtonSizeEnum = ButtonSizeEnum;
-  protected readonly buttonTypeEnum: typeof ButtonTypeEnum = ButtonTypeEnum;
-  protected readonly buttonVariantEnum: typeof ButtonVariantEnum =
-    ButtonVariantEnum;
-
-  public variant: InputSignal<string> = input<string>(
-    this.buttonVariantEnum.PRIMARY
-  );
-  public size: InputSignal<string> = input<string>(this.buttonSizeEnum.MD);
+  public variant: InputSignal<ButtonVariantType> =
+    input<ButtonVariantType>('primary');
+  public size: InputSignal<ButtonSizeType> = input<ButtonSizeType>('md');
   public isLoading: InputSignal<boolean> = input<boolean>(false);
   public disabled: InputSignal<boolean> = input<boolean>(false);
-  public type: InputSignal<string> = input<string>(this.buttonTypeEnum.BUTTON);
+  public type: InputSignal<string> = input<string>('button'); // в buttonRole
   public buttonClick: OutputEmitterRef<void> = output<void>();
 
   onButtonClick(): void {

@@ -1,0 +1,31 @@
+@use "vars" as *;
+@use "mixins";
+
+.link {
+  font-weight: 500;
+  color: $primary-color;
+  transition: color 0.2s ease;
+
+  &:hover,
+  &.active {
+    color: $link-color;
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &.sm {
+    font-size: 12px;
+  }
+
+  &.md {
+    font-size: 14px;
+  }
+
+  &.lg {
+    font-size: 16px;
+  }
+}

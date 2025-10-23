@@ -1,0 +1,13 @@
+<a
+  class="link"
+  [routerLink]="routerLink()"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: true }"
+  [class.sm]="size() === 'sm'"
+  [class.md]="size() === 'md'"
+  [class.lg]="size() === 'lg'"
+>
+  <p class="content">
+    <ng-content></ng-content>
+  </p>
+</a>

@@ -6,11 +6,13 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 ---
 
 ## 📘 Создать задачу
+
 **POST** `/api/tasks`
 
 Создаёт новую задачу.
 
 **Request body:**
+
 ```json
 {
   "title": "Написать документацию",
@@ -20,6 +22,7 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 ```
 
 **Response 201:**
+
 ```json
 {
   "_id": "6718b3f12c1b2a7f71d9e1a0",
@@ -33,11 +36,13 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 ---
 
 ## 📗 Получить все задачи
+
 **GET** `/api/tasks`
 
 Возвращает список всех задач.
 
 **Response:**
+
 ```json
 [
   {
@@ -56,6 +61,7 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 ---
 
 ## 📙 Получить задачу по ID
+
 **GET** `/api/tasks/:id`
 
 Возвращает задачу по её идентификатору.
@@ -64,6 +70,7 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 `GET /api/tasks/6718b3f12c1b2a7f71d9e1a0`
 
 **Response:**
+
 ```json
 {
   "_id": "6718b3f12c1b2a7f71d9e1a0",
@@ -76,6 +83,7 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 ---
 
 ## 📒 Получить задачи по статусу
+
 **GET** `/api/tasks/status/:status`
 
 Возвращает все задачи с определённым статусом (`pending`, `in-progress`, `done`).
@@ -84,6 +92,7 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 `GET /api/tasks/status/in-progress`
 
 **Response:**
+
 ```json
 [
   {
@@ -97,11 +106,13 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 ---
 
 ## 📕 Обновить задачу
+
 **PATCH** `/api/tasks/:id`
 
 Изменяет задачу по ID.
 
 **Request body:**
+
 ```json
 {
   "title": "Обновлённая задача",
@@ -110,6 +121,7 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 ```
 
 **Response:**
+
 ```json
 {
   "_id": "6718b3f12c1b2a7f71d9e1a0",
@@ -121,6 +133,7 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 ---
 
 ## 🗑️ Удалить задачу
+
 **DELETE** `/api/tasks/:id`
 
 Удаляет задачу по ID.
@@ -129,18 +142,9 @@ https://backendtodo-wo1d7d3c.b4a.run/api/tasks
 `DELETE /api/tasks/6718b3f12c1b2a7f71d9e1a0`
 
 **Response:**
+
 ```json
 {
   "message": "Task deleted successfully"
 }
 ```
-
----
-
-## 🧠 Возможные ошибки
-
-| Код | Сообщение | Причина |
-|-----|------------|----------|
-| 400 | Bad Request | Некорректные данные |
-| 404 | Not Found | Задача не найдена |
-| 500 | Internal Server Error | Ошибка сервера |

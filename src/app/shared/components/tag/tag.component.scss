@@ -6,7 +6,6 @@
   align-items: center;
   gap: 12px;
   cursor: pointer;
-  width: max-content;
 
   .circle {
     height: 10px;
@@ -14,28 +13,29 @@
     border-radius: 50px;
 
     &.purple {
-      background-color: $primary-purple;
+      background-color: $purple;
     }
 
     &.red {
-      background-color: $primary-red;
+      background-color: $negative;
     }
 
     &.green {
-      background-color: $primary-green;
+      background-color: $success;
     }
 
     &.orange {
-      background-color: $primary-orange;
+      background-color: $danger;
     }
   }
 
   .text {
     color: $white;
     font-weight: 500;
+    transition: color 0.2s ease;
 
     &:hover {
-      color: $primary-gray;
+      color: $gray;
     }
   }
 }

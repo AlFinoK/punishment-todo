@@ -2,53 +2,32 @@
   <app-button>New task</app-button>
 
   <div class="btns">
-    <app-button
-      [size]="buttonSizeEnum.NONE"
-      [variant]="buttonVariantEnum.CLEAR"
-    >
+    <app-link routerLink="/tasks/my-tasks">
       <lucide-icon class="icon" name="mail" />
       <p>My tasks</p>
-    </app-button>
+    </app-link>
 
-    <app-button
-      [size]="buttonSizeEnum.NONE"
-      [variant]="buttonVariantEnum.CLEAR"
-    >
+    <app-link routerLink="/tasks/important-tasks">
       <lucide-icon class="icon" name="star" />
       <p>Important tasks</p>
-    </app-button>
-    <app-button
-      [size]="buttonSizeEnum.NONE"
-      [variant]="buttonVariantEnum.CLEAR"
-    >
+    </app-link>
+    <app-link routerLink="/tasks/finished-tasks">
       <lucide-icon class="icon" name="check" />
       <p>Finished tasks</p>
-    </app-button>
-    <app-button
-      [size]="buttonSizeEnum.NONE"
-      [variant]="buttonVariantEnum.CLEAR"
-    >
+    </app-link>
+    <app-link routerLink="/tasks/deleted-tasks">
       <lucide-icon class="icon" name="trash" />
       <p>Deleted tasks</p>
-    </app-button>
+    </app-link>
   </div>
 
   <div class="tags">
     <h6 class="tags-title">Tags</h6>
     <div class="tags-btns">
-      <app-tag
-        [tagColor]="tagColorEnum.PURPLE"
-        [tagType]="tagTypeEnum.PRODUCTIVITY"
-      />
-      <app-tag
-        [tagColor]="tagColorEnum.GREEN"
-        [tagType]="tagTypeEnum.EDUCATION"
-      />
-      <app-tag
-        [tagColor]="tagColorEnum.ORANGE"
-        [tagType]="tagTypeEnum.HEALTH"
-      />
-      <app-tag [tagColor]="tagColorEnum.RED" [tagType]="tagTypeEnum.URGENTLY" />
+      <app-tag tagColor="purple" tagValue="productivity" />
+      <app-tag tagColor="green" tagValue="education" />
+      <app-tag tagColor="orange" tagValue="health" />
+      <app-tag tagColor="red" tagValue="urgently" />
     </div>
   </div>
 </section>

@@ -7,7 +7,7 @@ import {
 
 import type { TaskFeaturesInterface } from '@pages/tasks';
 
-import { BadgeTypeEnum } from './core';
+import { BadgeValueType } from './core';
 
 @Component({
   selector: 'app-badge',
@@ -16,12 +16,10 @@ import { BadgeTypeEnum } from './core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeComponent {
-  protected readonly badgeTypeEnum: typeof BadgeTypeEnum = BadgeTypeEnum;
+  protected readonly badgeValueType: BadgeValueType = 'productivity';
 
-  public badgeType: InputSignal<TaskFeaturesInterface> =
-    input<TaskFeaturesInterface>({
-      feature: this.badgeTypeEnum.PRODUCTIVITY,
-    });
+  public badgeValue: InputSignal<TaskFeaturesInterface> =
+    input<TaskFeaturesInterface>({ feature: 'productivity' });
 
   constructor() {}
 }

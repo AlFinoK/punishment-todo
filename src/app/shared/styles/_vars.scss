@@ -1,21 +1,26 @@
 $primary-color: rgba(180, 183, 189, 1);
-$placeholder-color: rgba(103, 109, 125, 1);
-$primary-purple: rgba(115, 103, 240, 1);
-$primary-purple-hover: rgba(132, 121, 245, 1);
-$primary-red: rgba(234, 84, 85, 1);
-$primary-green: rgba(40, 199, 111, 1);
-$primary-blue: rgba(115, 103, 240, 1);
-$primary-orange: rgba(255, 159, 67, 1);
-$primary-gray: rgba(130, 130, 130, 1);
-
-$white: #fff;
-$dashboard-bg: #283046;
-$bg: #161d31;
 
 $secondary-color: rgba(208, 210, 214, 1);
-$secondary-red: rgba(234, 84, 85, 0.12);
-$secondary-green: rgba(40, 199, 111, 0.12);
-$secondary-blue: rgba(115, 103, 240, 0.12);
-$secondary-orange: rgba(255, 159, 67, 1);
+
+$purple: rgba(115, 103, 240, 1);
+$negative: rgba(234, 84, 85, 1);
+$success: rgba(40, 199, 111, 1);
+$danger: rgba(255, 159, 67, 1);
+$gray: rgba(130, 130, 130, 1);
+$white: #fff;
+
+$negative-opacity: rgba(234, 84, 85, 0.12);
+$success-opacity: rgba(40, 199, 111, 0.12);
+$purple-opacity: rgba(115, 103, 240, 0.12);
+$danger-opacity: rgba(255, 159, 67, 0.12);
+
+$bg: #161d31;
+$dashboard-bg: #283046;
+
+$purple-hover: rgba(132, 121, 245, 1);
+
+$link-color: rgba(155, 81, 224, 1);
 
 $primary-border: rgba(49, 57, 76, 1);
+
+$placeholder-color: rgba(103, 109, 125, 1);
