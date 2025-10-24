@@ -1,5 +1,5 @@
 <section class="navbar">
-  <app-button>New task</app-button>
+  <app-button (click)="onOpenDrawer(true)">New task</app-button>
 
   <div class="btns">
     <app-link routerLink="/tasks/my-tasks">
@@ -24,10 +24,14 @@
   <div class="tags">
     <h6 class="tags-title">Tags</h6>
     <div class="tags-btns">
-      <app-tag tagColor="purple" tagValue="productivity" />
-      <app-tag tagColor="green" tagValue="education" />
-      <app-tag tagColor="orange" tagValue="health" />
-      <app-tag tagColor="red" tagValue="urgently" />
+      @for(tag of tags; track tag.value) {
+      <app-tag [tagColor]="tag.color" [tagValue]="tag.value" />
+      }
     </div>
   </div>
 </section>
+
+<app-task-drawer
+  [isOpenDrawer]="isOpenDrawer()"
+  (onDrawerToggle)="onOpenDrawer($event)"
+/>

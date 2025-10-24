@@ -1,0 +1,32 @@
+<div class="task-drawer">
+  <app-drawer
+    [isOpen]="isOpenDrawer()"
+    (onDrawerToggle)="onDrawerToggles($event)"
+  >
+    <div class="box name">
+      <label>Name</label>
+      <input type="text" placeholder="Task name" />
+    </div>
+    <div class="box date">
+      <label>Task completion date</label>
+      <input type="text" placeholder="YYYY-MM-DD" />
+    </div>
+    <div class="box isImportant">
+      <input type="checkbox" />
+      <label>Important task</label>
+    </div>
+    <div class="box datepicker">
+      <label>Date and time of completion</label>
+      <input type="text" placeholder="Date and time" />
+    </div>
+    <div class="box descr">
+      <label>Description of the task</label>
+      <textarea type="text" placeholder="Description"></textarea>
+    </div>
+    <div class="tags"></div>
+    <div class="btns">
+      <app-button>Add</app-button>
+      <app-button [variant]="'outline'">Delete</app-button>
+    </div>
+  </app-drawer>
+</div>

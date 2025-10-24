@@ -9,4 +9,6 @@ import { NavbarComponent } from './common';
   styleUrl: './tasks.component.scss',
   imports: [RouterOutlet, NavbarComponent],
 })
-export class TasksComponent {}
+export class TasksComponent {
+  constructor() {}
+}

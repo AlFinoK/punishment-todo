@@ -5,6 +5,7 @@ import {
   InputSignal,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { LinkSizeType } from './core';
 
 @Component({
   selector: 'app-link',
@@ -14,7 +15,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LinkComponent {
-  public size: InputSignal<string> = input<string>('md');
+  public size: InputSignal<LinkSizeType> = input<LinkSizeType>('md');
   public routerLink: InputSignal<string> = input<string>('');
 
   constructor() {}

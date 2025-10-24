@@ -1,17 +1,3 @@
-@if(badgeValue().feature === 'productivity') {
-<div class="badge productivity">
-  <p class="text">Productivity</p>
+<div [class]="['badge', badgeValue()]">
+  <p class="text">{{ badgeValue() | titlecase }}</p>
 </div>
-} @if(badgeValue().feature === 'education') {
-<div class="badge education">
-  <p class="text">Education</p>
-</div>
-} @if(badgeValue().feature === 'health') {
-<div class="badge health">
-  <p class="text">Health</p>
-</div>
-} @if(badgeValue().feature === 'urgently') {
-<div class="badge urgently">
-  <p class="text">Urgently</p>
-</div>
-}

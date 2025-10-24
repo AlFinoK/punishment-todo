@@ -5,21 +5,19 @@ import {
   InputSignal,
 } from '@angular/core';
 
-import type { TaskFeaturesInterface } from '@pages/tasks';
-
 import { BadgeValueType } from './core';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-badge',
   templateUrl: './badge.component.html',
   styleUrl: './badge.component.scss',
+  imports: [TitleCasePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeComponent {
-  protected readonly badgeValueType: BadgeValueType = 'productivity';
-
-  public badgeValue: InputSignal<TaskFeaturesInterface> =
-    input<TaskFeaturesInterface>({ feature: 'productivity' });
+  public badgeValue: InputSignal<BadgeValueType> =
+    input<BadgeValueType>('productivity');
 
   constructor() {}
 }
