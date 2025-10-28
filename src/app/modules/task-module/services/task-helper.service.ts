@@ -34,4 +34,9 @@ export class TaskHelperService {
   public filterImportantTasks(tasks: TaskInterface[]): TaskInterface[] {
     return tasks.filter((task: TaskInterface): boolean => task.isImportant);
   }
+
+  public updateTasks(newTask: TaskInterface): void {
+    const currentTasks: TaskInterface[] = this.tasks$.getValue();
+    this.tasks$.next([...currentTasks, newTask]);
+  }
 }

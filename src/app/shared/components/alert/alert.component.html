@@ -1,7 +1,11 @@
-@if(isVisible()){
-<div class="alert">
-  <div class="alert-content" [class]="[variant()]">
-    <p>{{ message() }}</p>
-  </div>
+<div
+  [class]="{
+    alert: true,
+    success: variant() === 'success',
+    error: variant() === 'error',
+    warning: variant() === 'warning',
+    fadeIn: isVisible()
+  }"
+>
+  <p>{{ message() }}</p>
 </div>
-}

@@ -6,7 +6,6 @@ import {
   output,
   OutputEmitterRef,
 } from '@angular/core';
-
 import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
@@ -18,11 +17,11 @@ import { LucideAngularModule } from 'lucide-angular';
 })
 export class DrawerComponent {
   public isOpen: InputSignal<boolean> = input<boolean>(false);
-  public toggleDrawer: OutputEmitterRef<boolean> = output<boolean>();
+  public closeDrawer: OutputEmitterRef<boolean> = output<boolean>();
 
   constructor() {}
 
-  protected onToggleDrawer(): void {
-    this.toggleDrawer.emit(false);
+  protected onCloseDrawer(): void {
+    this.closeDrawer.emit(false);
   }
 }

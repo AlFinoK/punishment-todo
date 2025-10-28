@@ -1,5 +1,5 @@
 <section class="navbar">
-  <app-button (click)="onOpenDrawer(true)">New task</app-button>
+  <app-button (click)="openDrawer()">New task</app-button>
 
   <div class="btns">
     <app-link routerLink="/tasks/my-tasks">
@@ -31,7 +31,6 @@
   </div>
 </section>
 
-<app-task-drawer
-  [isOpenDrawer]="isOpenDrawer()"
-  (toggleDrawer)="onOpenDrawer($event)"
-/>
+<app-drawer [isOpen]="isOpenDrawer()" (closeDrawer)="closeDrawer()">
+  <app-task-form (formSubmitted)="closeDrawer()" />
+</app-drawer>

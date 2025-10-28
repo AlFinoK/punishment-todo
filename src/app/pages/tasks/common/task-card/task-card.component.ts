@@ -14,8 +14,8 @@ import {
 } from '@modules/task-module';
 import { ButtonComponent, BadgeComponent } from '@shared/components';
 
-import { TaskDrawerComponent } from '../task-drawer';
 import { AlertService } from '@shared/components/alert/core';
+import { TaskFormComponent } from '../task-form/task-form.component';
 
 @Component({
   selector: 'app-task-card',
@@ -24,8 +24,8 @@ import { AlertService } from '@shared/components/alert/core';
   imports: [
     ButtonComponent,
     LucideAngularModule,
-    TaskDrawerComponent,
     BadgeComponent,
+    TaskFormComponent,
   ],
 })
 export class TaskCardComponent {
@@ -41,10 +41,6 @@ export class TaskCardComponent {
     private _taskService: TaskService,
     private _alertService: AlertService
   ) {}
-
-  protected onOpenDrawer(event: boolean): void {
-    this.isOpenDrawer.set(event);
-  }
 
   protected onDeleteTask(id: string | undefined): void {
     if (!id) return;

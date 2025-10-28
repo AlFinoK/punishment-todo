@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
-import { OverlayConfig } from '@angular/cdk/overlay';
 import { Observable, of } from 'rxjs';
-import { AlertVariantType } from '../types';
+import { OverlayRef } from '@angular/cdk/overlay';
+import { ComponentRef, Injectable } from '@angular/core';
+
+import { AlertComponent } from '@shared/components/alert';
 import { OverlayService } from '@modules/overlay-module';
-import { AlertComponent } from '../../alert.component';
+
+import { AlertVariantType } from '../types';
 
 interface AlertOptions {
   variant?: AlertVariantType;
@@ -15,20 +17,11 @@ export class AlertService {
   constructor(private overlayService: OverlayService) {}
 
   open(message: string, options?: AlertOptions): Observable<void> {
-    const config: OverlayConfig = {
-      hasBackdrop: false,
-      panelClass: 'alert-overlay-panel',
-      positionStrategy: this.overlayService['overlay']
-        .position()
-        .global()
-        .top('20px')
-        .centerHorizontally(),
-    };
-
-    const { overlayRef, componentRef } = this.overlayService.open(
-      AlertComponent,
-      config
-    );
+    const {
+      overlayRef,
+      componentRef,
+    }: { overlayRef: OverlayRef; componentRef: ComponentRef<AlertComponent> } =
+      this.overlayService.open(AlertComponent);
 
     componentRef.instance.show(
       message,

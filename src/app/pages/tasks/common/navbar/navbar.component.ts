@@ -6,9 +6,9 @@ import {
   TagComponent,
   LinkComponent,
   TagInterface,
+  DrawerComponent,
 } from '@shared/components';
-
-import { TaskDrawerComponent } from '../task-drawer';
+import { TaskFormComponent } from '../task-form';
 
 @Component({
   selector: 'app-navbar',
@@ -19,7 +19,8 @@ import { TaskDrawerComponent } from '../task-drawer';
     LucideAngularModule,
     TagComponent,
     LinkComponent,
-    TaskDrawerComponent,
+    DrawerComponent,
+    TaskFormComponent,
   ],
 })
 export class NavbarComponent {
@@ -46,7 +47,11 @@ export class NavbarComponent {
 
   constructor() {}
 
-  protected onOpenDrawer(event: boolean): void {
-    this.isOpenDrawer.set(event);
+  protected openDrawer(): void {
+    this.isOpenDrawer.set(true);
+  }
+
+  protected closeDrawer(): void {
+    this.isOpenDrawer.set(false);
   }
 }

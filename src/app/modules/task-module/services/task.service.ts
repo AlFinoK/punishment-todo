@@ -32,7 +32,20 @@ export class TaskService {
   }
 
   public createTask(data: CreateTaskInterface): Observable<any> {
-    return this._http.post(`${environment.api_url}/tasks`, data);
+    this._taskHelperService.isLoadingTasks$.next(true);
+
+    return this._http
+      .post<TaskInterface>(`${environment.api_url}/tasks`, data)
+      .pipe(
+        tap((newTask: TaskInterface): void => {
+          this._taskHelperService.updateTasks(newTask);
+          this._taskHelperService.isLoadingTasks$.next(false);
+        }),
+        catchError((error: HttpErrorResponse): never => {
+          this._taskHelperService.isLoadingTasks$.next(false);
+          throw error;
+        })
+      );
   }
 
   public deleteTaskById(id: string) {
@@ -41,7 +54,7 @@ export class TaskService {
     return this._http.delete(`${environment.api_url}/tasks/${id}`).pipe(
       tap((): void => {
         const currentTasks: TaskInterface[] =
-          this._taskHelperService.tasks$.value;
+          this._taskHelperService.tasks$.getValue();
         const updatedTasks: TaskInterface[] = currentTasks.filter(
           (task: TaskInterface): boolean => task._id !== id
         );

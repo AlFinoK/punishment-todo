@@ -1,0 +1,9 @@
+<div class="input">
+  <label>{{ label() }}</label>
+  <input
+    [type]="variant()"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    (input)="onInputChange($event)"
+  />
+</div>
