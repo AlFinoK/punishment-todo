@@ -1,22 +1,26 @@
-<div class="task-card">
+<div (click)="onOpenDrawer(true)" class="task-card">
   <div class="left">
     <input class="checkbox" type="checkbox" />
 
-    <p class="title">{{ task()?.title }}</p>
+    <p class="title">{{ task()?.name }}</p>
   </div>
 
   <div class="right">
-    <!-- @for (feature of task()?.features; track task()?.id) {
+    @for (tag of task()?.tags; track $index) {
     <div class="badges">
-      <app-badge [id]="task()?.id" />
+      <app-badge [badgeValue]="tag" [id]="$index" />
     </div>
-    } -->
+    }
 
     <div class="time">
-      <!-- <p class="date">{{ task()?.created_at }}</p> -->
+      <p class="date">{{ task()?.endDate }}</p>
     </div>
 
-    <app-button [size]="'none'" [variant]="'clear'">
+    <app-button
+      (buttonClick)="onDeleteTask(task()?._id)"
+      [size]="'none'"
+      [variant]="'clear'"
+    >
       <lucide-icon class="icon" name="trash" />
     </app-button>
 
@@ -25,3 +29,8 @@
     </app-button>
   </div>
 </div>
+
+<app-task-drawer
+  [isOpenDrawer]="isOpenDrawer()"
+  (toggleDrawer)="onOpenDrawer($event)"
+/>

@@ -1,1 +1,1 @@
-export * from './todo-module';
+export * from './task-module';

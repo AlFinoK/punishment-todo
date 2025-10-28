@@ -1,6 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  InputSignal,
+} from '@angular/core';
+
+import { TaskInterface } from '@modules/task-module';
+
 import { TaskCardComponent } from '../task-card';
-import { TodoInterface } from 'src/app/modules/todo-module';
 
 @Component({
   selector: 'app-tasks-list',
@@ -10,5 +17,9 @@ import { TodoInterface } from 'src/app/modules/todo-module';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksListComponent {
-  protected tasks: TodoInterface[] = [];
+  public tasks: InputSignal<TaskInterface[] | null> = input<
+    TaskInterface[] | null
+  >(null);
+
+  constructor() {}
 }

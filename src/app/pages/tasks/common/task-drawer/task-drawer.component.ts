@@ -10,13 +10,12 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { LucideAngularModule } from 'lucide-angular';
-
-import { DrawerComponent, ButtonComponent } from '@shared/components';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
-import { TodoService } from 'src/app/modules/todo-module/services/todo.service';
-import { TodoInterface } from 'src/app/modules/todo-module';
+import { LucideAngularModule } from 'lucide-angular';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
+import { TaskInterface, TaskService } from '@modules/task-module';
+import { DrawerComponent, ButtonComponent } from '@shared/components';
 
 @Component({
   selector: 'app-task-drawer',
@@ -26,39 +25,37 @@ import { TodoInterface } from 'src/app/modules/todo-module';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskDrawerComponent implements OnInit, OnDestroy {
-  public onDrawerToggle: OutputEmitterRef<boolean> = output<boolean>();
-
   public isOpenDrawer: InputSignal<boolean> = input<boolean>(false);
+  public toggleDrawer: OutputEmitterRef<boolean> = output<boolean>();
 
   private _destroy$: Subject<void> = new Subject<void>();
 
   protected form: FormGroup | null = null;
-  protected isLoading: WritableSignal<boolean> = signal(false);
+  protected isLoading: WritableSignal<boolean> = signal<boolean>(false);
 
   constructor(
-    private _formBuilder: FormBuilder,
-    private _todoService: TodoService
+    private _taskService: TaskService,
+    private _formBuilder: FormBuilder
   ) {}
 
   private _initForm(): void {
     this.form = this._formBuilder.group({});
   }
 
-  protected onDrawerToggles(event: boolean): void {
-    // rename in the future
-    this.onDrawerToggle.emit(event);
+  protected onToggleDrawer(event: boolean): void {
+    this.toggleDrawer.emit(event);
   }
 
   protected onSubmit(): void {
     if (this.form?.invalid) return;
 
-    const formValue: TodoInterface = this.form?.value;
+    const formValue: TaskInterface = this.form?.value;
     this.isLoading.set(true);
-    this._todoService
-      .requestCreateTodo(formValue)
+    this._taskService
+      .createTask(formValue)
       .pipe(takeUntil(this._destroy$))
       .subscribe(
-        (response: TodoInterface): void => {
+        (response: TaskInterface): void => {
           this.isLoading.set(false);
         },
         (): void => {

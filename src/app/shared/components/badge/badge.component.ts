@@ -16,8 +16,7 @@ import { TitleCasePipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeComponent {
-  public badgeValue: InputSignal<BadgeValueType> =
-    input<BadgeValueType>('productivity');
+  public badgeValue: InputSignal<string> = input<string>('productivity');
 
   constructor() {}
 }

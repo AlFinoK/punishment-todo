@@ -1,5 +1,5 @@
-import { EnvironmentsApiUrlInterface } from './interfaces/environments-config.interface';
+import { EnvironmentsApiUrlInterface } from './interfaces';
 
 export const environment: EnvironmentsApiUrlInterface = {
-  api_url: 'https://backendtodo-wo1d7d3c.b4a.run/api',
+  api_url: 'https://backendtodo-vf9a8txv.b4a.run/api',
 };

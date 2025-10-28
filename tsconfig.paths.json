@@ -4,6 +4,7 @@
     "paths": {
       "@shared/*": ["src/app/shared/*"],
       "@pages/*": ["src/app/pages/*"],
+      "@modules/*": ["src/app/modules/*"],
       "@public/*": ["public/*"]
     }
   }

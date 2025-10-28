@@ -1,11 +1,5 @@
-import {
-  Component,
-  output,
-  OutputEmitterRef,
-  signal,
-  WritableSignal,
-} from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
+import { Component, signal, WritableSignal } from '@angular/core';
 
 import {
   ButtonComponent,
@@ -13,6 +7,7 @@ import {
   LinkComponent,
   TagInterface,
 } from '@shared/components';
+
 import { TaskDrawerComponent } from '../task-drawer';
 
 @Component({

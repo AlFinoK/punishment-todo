@@ -6,7 +6,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px;
+  cursor: pointer;
   border: 1px solid $primary-border;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $bg;
+  }
 
   .left {
     .checkbox {
