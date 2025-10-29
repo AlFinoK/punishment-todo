@@ -1,9 +1,11 @@
-<div class="input">
-  <label>{{ label() }}</label>
+<div class="input-box">
+  <label class="label">{{ label() }}</label>
   <input
+    class="input"
     [type]="variant()"
     [placeholder]="placeholder()"
     [value]="value()"
     (input)="onInputChange($event)"
+    (blur)="onBlur()"
   />
 </div>

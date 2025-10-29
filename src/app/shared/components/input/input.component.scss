@@ -1,8 +1,19 @@
 @use "vars" as *;
 @use "mixins";
 
-.input {
+.input-box {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 20px;
+
+  .label {
+  }
+
+  .input {
+    padding: 6px 10px;
+    border: 1px solid $primary-border;
+    border-radius: 6px;
+  }
 }

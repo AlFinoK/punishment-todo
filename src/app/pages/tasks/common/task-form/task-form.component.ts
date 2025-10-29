@@ -3,15 +3,24 @@ import {
   ChangeDetectionStrategy,
   signal,
   output,
+  OutputEmitterRef,
+  WritableSignal,
+  OnInit,
 } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
-import { TaskService } from '@modules/task-module';
-import { ButtonComponent, InputComponent } from '@shared/components';
-import { AlertService } from '@shared/components/alert/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { DpDatePickerModule, IDatePickerConfig } from 'ng2-date-picker';
-import moment from 'moment';
+
+import { AlertService } from '@shared/components/alert/core';
+import { ButtonComponent, InputComponent } from '@shared/components';
+import { CreateTaskInterface, TaskService } from '@modules/task-module';
 
 @Component({
   selector: 'app-task-form',
@@ -22,70 +31,67 @@ import moment from 'moment';
     ButtonComponent,
     InputComponent,
     DpDatePickerModule,
-    FormsModule,
+    ReactiveFormsModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TaskFormComponent {
-  public formSubmitted = output<void>();
+export class TaskFormComponent implements OnInit {
+  public formSubmitted: OutputEmitterRef<void> = output<void>();
 
-  public taskName = signal('');
-  public taskDate = signal('');
-  public taskDescription = signal('');
-  public isLoadingSubmit = signal(false);
+  private _destroy$: Subject<void> = new Subject<void>();
 
-  public taskDateModel = moment();
+  protected isLoadingSubmit: WritableSignal<boolean> = signal(false);
 
-  public datePickerConfig: IDatePickerConfig = {
+  protected form: FormGroup | null = null;
+
+  protected datePickerConfig: IDatePickerConfig = {
     format: 'YYYY-MM-DD',
-    showGoToCurrent: true,
     firstDayOfWeek: 'mo',
   };
 
   constructor(
+    private _formBuilder: FormBuilder,
     private _taskService: TaskService,
     private _alertService: AlertService
   ) {}
 
-  protected onDateChange(date: any): void {
-    this.taskDate.set(moment(date).format('YYYY-MM-DD'));
+  private _initForm(): void {
+    this.form = this._formBuilder.group({
+      name: [null, Validators.required],
+      endDate: [null, Validators.required],
+      description: [null],
+    });
   }
 
   protected onSubmit(): void {
-    if (!this.taskName() || !this.taskDate() || !this.taskDescription()) {
-      this._alertService.open('Пожалуйста, заполните все поля', {
-        variant: 'warning',
-      });
-      return;
-    }
-
-    const payload = {
-      name: this.taskName(),
-      date: this.taskDate(),
-      description: this.taskDescription(),
-    };
+    const formValue: CreateTaskInterface = this.form?.value;
+    console.log(formValue);
 
     this.isLoadingSubmit.set(true);
 
-    this._taskService.createTask(payload).subscribe(
-      (): void => {
-        this.isLoadingSubmit.set(false);
-        this.taskName.set('');
-        this.taskDate.set('');
-        this.taskDescription.set('');
-        this._alertService.open('Задача успешно добавлена!', {
-          variant: 'success',
-        });
+    this._taskService
+      .createTask(formValue)
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(
+        (): void => {
+          this.isLoadingSubmit.set(false);
+          this._alertService
+            .open('The task was successfully added!', {
+              variant: 'success',
+            })
+            .subscribe();
 
-        this.formSubmitted.emit();
-      },
-      (error: HttpErrorResponse): void => {
-        console.error(error);
-        this.isLoadingSubmit.set(false);
-        this._alertService.open('Ошибка при добавлении задачи', {
-          variant: 'error',
-        });
-      }
-    );
+          this.formSubmitted.emit();
+        },
+        (error: HttpErrorResponse): void => {
+          const errorMsg: string = error.error.message;
+          this._alertService.open(errorMsg, { variant: 'error' }).subscribe();
+          this.isLoadingSubmit.set(false);
+        }
+      );
+  }
+
+  ngOnInit(): void {
+    this._initForm();
   }
 }

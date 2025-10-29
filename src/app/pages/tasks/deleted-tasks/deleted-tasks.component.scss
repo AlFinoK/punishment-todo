@@ -1,6 +1,12 @@
 @use "vars" as *;
 @use "mixins";
 
-.main-page {
-  background-color: $dashboard-bg;
+.deleted-tasks {
+  .loading,
+  .empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+  }
 }

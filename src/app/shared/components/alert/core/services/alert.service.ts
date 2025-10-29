@@ -8,7 +8,7 @@ import { OverlayService } from '@modules/overlay-module';
 import { AlertVariantType } from '../types';
 
 interface AlertOptions {
-  variant?: AlertVariantType;
+  variant: AlertVariantType;
   autoClose?: number;
 }
 

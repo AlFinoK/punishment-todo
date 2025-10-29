@@ -1,1 +1,1 @@
-export type InputVariantType = 'primary' | 'outline' | 'clear';
+export type InputVariantType = 'text' | 'password';

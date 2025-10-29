@@ -3,10 +3,10 @@
   <app-page-title text="My tasks" />
 
   @if(isLoadingTasks()) {
-  <div class="loading">loading</div>
-  } @else{ @if(tasks()?.length) {
-  <app-tasks-list [tasks]="tasks()" />
-  } @else {
+  <div class="loading">loading...</div>
+  } @else if(!tasks()?.length) {
   <p class="empty">No tasks</p>
-  } }
+  } @else {
+  <app-tasks-list [tasks]="tasks()" />
+  }
 </section>

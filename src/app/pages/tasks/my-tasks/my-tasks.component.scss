@@ -2,8 +2,6 @@
 @use "mixins";
 
 .my-tasks {
-  background-color: $dashboard-bg;
-
   .loading,
   .empty {
     display: flex;

@@ -9,7 +9,15 @@ import { TaskStatusEnum } from '../enums';
 export class TaskHelperService {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
 
-  public tasks$: BehaviorSubject<TaskInterface[]> = new BehaviorSubject<
+  public allTasks$: BehaviorSubject<TaskInterface[]> = new BehaviorSubject<
+    TaskInterface[]
+  >([]);
+  public importantTasks$: BehaviorSubject<TaskInterface[]> =
+    new BehaviorSubject<TaskInterface[]>([]);
+  public deletedTasks$: BehaviorSubject<TaskInterface[]> = new BehaviorSubject<
+    TaskInterface[]
+  >([]);
+  public finishedTasks$: BehaviorSubject<TaskInterface[]> = new BehaviorSubject<
     TaskInterface[]
   >([]);
   public isLoadingTasks$: BehaviorSubject<boolean> =
@@ -17,26 +25,8 @@ export class TaskHelperService {
 
   constructor() {}
 
-  public filterDeletedTasks(tasks: TaskInterface[]): TaskInterface[] {
-    return tasks.filter(
-      (task: TaskInterface): boolean =>
-        task.status === this.taskStatusEnum.DELETED
-    );
-  }
-
-  public filterFinishedTasks(tasks: TaskInterface[]): TaskInterface[] {
-    return tasks.filter(
-      (task: TaskInterface): boolean =>
-        task.status === this.taskStatusEnum.FINISHED
-    );
-  }
-
-  public filterImportantTasks(tasks: TaskInterface[]): TaskInterface[] {
-    return tasks.filter((task: TaskInterface): boolean => task.isImportant);
-  }
-
   public updateTasks(newTask: TaskInterface): void {
-    const currentTasks: TaskInterface[] = this.tasks$.getValue();
-    this.tasks$.next([...currentTasks, newTask]);
+    const currentTasks: TaskInterface[] = this.allTasks$.getValue();
+    this.allTasks$.next([...currentTasks, newTask]);
   }
 }

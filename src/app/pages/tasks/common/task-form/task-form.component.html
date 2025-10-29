@@ -1,34 +1,42 @@
-<div class="task-form">
+@if(form){
+<form class="task-form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="name">
     <app-input
-      [label]="'Task Name'"
-      [placeholder]="'Enter task name'"
-      [value]="taskName()"
-      (valueChange)="taskName.set($event)"
+      label="Task Name"
+      placeholder="Enter task name"
+      formControlName="name"
     />
   </div>
 
   <div class="date">
-    <label class="label">Completion Date</label>
-    <dp-date-picker
-      [(ngModel)]="taskDateModel"
-      [config]="datePickerConfig"
-      (ngModelChange)="onDateChange($event)"
-    ></dp-date-picker>
+    <label class="date-label">Completion Date</label>
+    <div class="date-picker-box">
+      <dp-date-picker
+        class="date-picker"
+        formControlName="endDate"
+        [config]="datePickerConfig"
+      />
+      <lucide-icon class="icon" name="calendar" />
+    </div>
   </div>
 
   <div class="descr">
     <app-input
-      [label]="'Description'"
-      [placeholder]="'Task description'"
-      [value]="taskDescription()"
-      (valueChange)="taskDescription.set($event)"
+      label="Description"
+      placeholder="Task description"
+      formControlName="description"
     />
   </div>
 
   <div class="btns">
-    <app-button [disabled]="isLoadingSubmit()" (click)="onSubmit()">
+    <app-button
+      buttonRole="submit"
+      [disabled]="isLoadingSubmit()"
+      (click)="onSubmit()"
+    >
       {{ isLoadingSubmit() ? "Saving..." : "Add" }}
     </app-button>
   </div>
-</div>
+</form>
+
+}

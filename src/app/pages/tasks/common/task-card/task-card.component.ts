@@ -47,15 +47,14 @@ export class TaskCardComponent {
 
     event?.stopPropagation();
     this._taskService.deleteTaskById(id).subscribe((): void => {
-      this._alertService.open('Задача успешно удалена', {
+      this._alertService.open('The task successfully deleted', {
         variant: 'success',
       }),
         (): void => {
-          this._alertService.open('Не удалось удалить задачу', {
+          this._alertService.open('Failed to delete task', {
             variant: 'error',
           });
         };
     });
-    console.log(id, 'deleted');
   }
 }

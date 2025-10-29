@@ -1,4 +1,12 @@
 <section class="finished-tasks">
   <app-search-filter />
   <app-page-title text="Finished tasks" />
+
+  @if(isLoadingTasks()) {
+  <div class="loading">loading...</div>
+  } @else if(!finishedTasks()?.length) {
+  <p class="empty">No tasks</p>
+  } @else {
+  <app-tasks-list [tasks]="finishedTasks()" />
+  }
 </section>

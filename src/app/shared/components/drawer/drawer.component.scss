@@ -24,7 +24,7 @@
 
   .content {
     background-color: $dashboard-bg;
-    width: 300px;
+    width: 360px;
     height: 100%;
 
     .top {
@@ -51,14 +51,15 @@
           width: 16px;
           height: 16px;
           cursor: pointer;
+
+          &:hover {
+            color: $white;
+          }
         }
       }
     }
 
     .bottom {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
       padding: 20px;
     }
   }

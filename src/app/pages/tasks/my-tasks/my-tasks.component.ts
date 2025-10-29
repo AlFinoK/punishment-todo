@@ -1,7 +1,11 @@
 import { Subject, takeUntil } from 'rxjs';
 import { Component, signal, WritableSignal } from '@angular/core';
 
-import { TaskInterface, TaskService } from '@modules/task-module';
+import {
+  TaskInterface,
+  TaskService,
+  TaskStatusEnum,
+} from '@modules/task-module';
 
 import {
   TasksListComponent,
@@ -18,6 +22,8 @@ import { TaskHelperService } from '@modules/task-module/services/task-helper.ser
   imports: [TasksListComponent, PageTitleComponent, SearchFilterComponent],
 })
 export class MyTasksComponent {
+  protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
+
   protected tasks: WritableSignal<TaskInterface[] | null> = signal<
     TaskInterface[] | null
   >(null);
@@ -32,7 +38,7 @@ export class MyTasksComponent {
   ) {}
 
   private _listenAllTasks(): void {
-    this._taskHelperService.tasks$
+    this._taskHelperService.allTasks$
       .pipe(takeUntil(this._destroy$))
       .subscribe((tasks: TaskInterface[]): void => {
         this.tasks.set(tasks);
@@ -47,10 +53,16 @@ export class MyTasksComponent {
       .pipe(takeUntil(this._destroy$))
       .subscribe(
         (tasks: TaskInterface[]): void => {
-          this.tasks.set(tasks);
+          const filteredTasks: TaskInterface[] = tasks.filter(
+            (task: TaskInterface): boolean =>
+              task.status !== this.taskStatusEnum.FINISHED &&
+              task.status !== this.taskStatusEnum.DELETED
+          );
+
+          this.tasks.set(filteredTasks);
           this.isLoadingTasks.set(false);
 
-          this._alertService.open('Задачи успешно загружены', {
+          this._alertService.open('Tasks successfully loaded', {
             variant: 'success',
           });
         },
@@ -58,7 +70,7 @@ export class MyTasksComponent {
         (): void => {
           this.isLoadingTasks.set(false);
 
-          this._alertService.open('Не удалось загрузить задачи', {
+          this._alertService.open('Failed to load tasks', {
             variant: 'error',
           });
         }

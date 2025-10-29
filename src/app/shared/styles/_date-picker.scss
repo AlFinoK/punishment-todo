@@ -1,0 +1,91 @@
+@use "vars" as *;
+
+.dp-popup {
+  background: transparent !important;
+  box-shadow: 0px 14px 28px 0px rgba(0, 0, 0, 0.2) !important;
+  border: none !important;
+}
+
+.dp-day-calendar-container,
+.dp-month-calendar-container {
+  background: transparent !important;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+dp-month-calendar .dp-calendar-month {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.dp-nav-header {
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+dp-calendar-nav .dp-calendar-nav-container,
+dp-day-calendar .dp-calendar-wrapper,
+dp-month-calendar .dp-calendar-wrapper {
+  background: $bg !important;
+  border: none !important;
+  border-radius: 6px !important;
+}
+
+dp-calendar-nav .dp-calendar-nav-container {
+  height: 30px !important;
+}
+
+dp-day-calendar .dp-weekdays {
+  margin-bottom: 10px;
+}
+
+dp-day-calendar .dp-calendar-weekday {
+  border: none !important;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+dp-calendar-nav .dp-current-location-btn {
+  display: none !important;
+}
+
+.dp-day-calendar .dp-calendar-day {
+  font-size: 14px;
+  line-height: 21px;
+  width: 36px;
+  height: 36px;
+}
+
+dp-day-calendar .dp-weekdays {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.dp-selected {
+  background: $purple !important;
+  color: $white !important;
+  border-radius: 50px;
+}
+
+.dp-calendar-day,
+.dp-calendar-month {
+  transition: all 0.1s;
+}
+
+.dp-calendar-month:hover,
+.dp-calendar-day:hover {
+  background: $dashboard-bg !important;
+  border: 2px solid $purple !important;
+  border-radius: 50px;
+}
+
+dp-month-calendar .dp-month-calendar-container {
+  background: transparent !important;
+}
+
+.dp-calendar-week {
+  display: flex;
+  justify-content: center;
+}

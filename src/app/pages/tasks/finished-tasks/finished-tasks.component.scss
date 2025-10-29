@@ -3,4 +3,12 @@
 
 .finished-tasks {
   background-color: $dashboard-bg;
+
+  .loading,
+  .empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+  }
 }
