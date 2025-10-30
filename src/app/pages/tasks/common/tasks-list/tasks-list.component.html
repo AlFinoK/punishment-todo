@@ -1,5 +1,7 @@
-<section class="tasks-list">
-  @for (task of tasks(); track task._id) {
-  <app-task-card [task]="task" />
+<section class="tasks-list" dndDropzone (dndDrop)="onTaskDrop($event)">
+  @for (task of localTasks(); track task._id) {
+  <div [dndDraggable]="task" [dndEffectAllowed]="'move'">
+    <app-task-card [task]="task" />
+  </div>
   }
 </section>

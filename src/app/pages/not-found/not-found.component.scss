@@ -1,5 +1,5 @@
 @use "vars" as *;
-@use "mixins";
+@use "mixins" as *;
 
 .not-found {
   height: 100%;
@@ -10,10 +10,8 @@
 
   .content {
     text-align: center;
-    display: flex;
+    @include flex-jc-ac();
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     gap: 40px;
     height: inherit;
     padding: 150px 50px 100px 50px;

@@ -1,12 +1,10 @@
 @use "vars" as *;
-@use "mixins";
+@use "mixins" as *;
 
 .deleted-tasks {
   .loading,
   .empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-jc-ac();
     height: 300px;
   }
 }

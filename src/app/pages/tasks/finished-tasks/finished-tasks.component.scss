@@ -1,14 +1,12 @@
 @use "vars" as *;
-@use "mixins";
+@use "mixins" as *;
 
 .finished-tasks {
   background-color: $dashboard-bg;
 
   .loading,
   .empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-jc-ac();
     height: 300px;
   }
 }

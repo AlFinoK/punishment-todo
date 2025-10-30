@@ -1,5 +1,5 @@
 @use "vars" as *;
-@use "mixins";
+@use "mixins" as *;
 
 .drawer {
   position: absolute;
@@ -42,9 +42,7 @@
       }
 
       &-right {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @include flex-jc-ac();
         gap: 6px;
 
         .icon {

@@ -16,6 +16,7 @@ import { ButtonComponent, BadgeComponent } from '@shared/components';
 
 import { AlertService } from '@shared/components/alert/core';
 import { TaskFormComponent } from '../task-form/task-form.component';
+import { DndHandleDirective } from 'ngx-drag-drop';
 
 @Component({
   selector: 'app-task-card',
@@ -26,6 +27,7 @@ import { TaskFormComponent } from '../task-form/task-form.component';
     LucideAngularModule,
     BadgeComponent,
     TaskFormComponent,
+    DndHandleDirective,
   ],
 })
 export class TaskCardComponent {
