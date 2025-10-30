@@ -6,6 +6,16 @@
   border: none !important;
 }
 
+.dp-calendar-day:disabled {
+  opacity: 0.5;
+  &:hover {
+    opacity: 0.5;
+    border: none !important;
+    background: transparent !important;
+    cursor: initial;
+  }
+}
+
 .dp-day-calendar-container,
 .dp-month-calendar-container {
   background: transparent !important;

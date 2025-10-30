@@ -12,7 +12,11 @@ import {
   TaskService,
   TaskStatusEnum,
 } from '@modules/task-module';
-import { ButtonComponent, BadgeComponent } from '@shared/components';
+import {
+  ButtonComponent,
+  BadgeComponent,
+  InputComponent,
+} from '@shared/components';
 
 import { AlertService } from '@shared/components/alert/core';
 import { TaskFormComponent } from '../task-form/task-form.component';
@@ -28,6 +32,7 @@ import { DndHandleDirective } from 'ngx-drag-drop';
     BadgeComponent,
     TaskFormComponent,
     DndHandleDirective,
+    InputComponent,
   ],
 })
 export class TaskCardComponent {

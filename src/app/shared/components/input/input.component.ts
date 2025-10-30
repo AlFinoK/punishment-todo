@@ -10,6 +10,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { InputVariantType } from './core';
+import { InputLabelPositionType } from './core/types/input-label-position.type';
 
 @Component({
   selector: 'app-input',
@@ -25,8 +26,10 @@ import { InputVariantType } from './core';
   ],
 })
 export class InputComponent implements ControlValueAccessor {
-  public label: InputSignal<string> = input('');
-  public placeholder: InputSignal<string> = input('');
+  public labelPosition: InputSignal<InputLabelPositionType> =
+    input<InputLabelPositionType>('left');
+  public label: InputSignal<string> = input<string>('');
+  public placeholder: InputSignal<string> = input<string>('');
   public variant: InputSignal<InputVariantType> =
     input<InputVariantType>('text');
 

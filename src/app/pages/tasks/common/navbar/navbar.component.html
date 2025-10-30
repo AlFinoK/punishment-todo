@@ -32,5 +32,5 @@
 </section>
 
 <app-drawer [isOpen]="isOpenDrawer()" (closeDrawer)="closeDrawer()">
-  <app-task-form (formSubmitted)="closeDrawer()" />
+  <app-task-form [action]="'create'" (formSubmitted)="closeDrawer()" />
 </app-drawer>

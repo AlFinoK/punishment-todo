@@ -60,7 +60,6 @@ export class DeletedTasksComponent {
 
           this.deletedTasks.set(filteredTasks);
           this.isLoadingTasks.set(false);
-
           this._alertService.open('Tasks successfully loaded', {
             variant: 'success',
           });
@@ -68,7 +67,6 @@ export class DeletedTasksComponent {
 
         (): void => {
           this.isLoadingTasks.set(false);
-
           this._alertService.open('Failed to load tasks', {
             variant: 'error',
           });

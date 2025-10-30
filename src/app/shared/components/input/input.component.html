@@ -1,11 +1,18 @@
-<div class="input-box">
-  <label class="label">{{ label() }}</label>
-  <input
-    class="input"
-    [type]="variant()"
-    [placeholder]="placeholder()"
-    [value]="value()"
-    (input)="onInputChange($event)"
-    (blur)="onBlur()"
-  />
+<div [class]="['input-container', labelPosition()]">
+  <div>
+    @if(label()) {
+    <label class="label">{{ label() }}</label>
+    }
+  </div>
+  <div class="input-container-inner">
+    <input
+      [class]="['input', variant()]"
+      [type]="variant() === 'checkbox' ? 'checkbox' : 'text'"
+      [value]="value()"
+      [checked]="value()"
+      [placeholder]="placeholder()"
+      (change)="onInputChange($event)"
+      (blur)="onBlur()"
+    />
+  </div>
 </div>

@@ -28,34 +28,25 @@ export class TaskService {
 
     return this._http.get<TaskInterface[]>(`${environment.api_url}/tasks`).pipe(
       tap((tasks: TaskInterface[]): void => {
-        const deletedStatus: boolean = status === this.taskStatusEnum.DELETED;
-        const finishedStatus: boolean = status === this.taskStatusEnum.FINISHED;
+        const filteredTasks: TaskInterface[] =
+          this._taskHelperService.filterTasks(
+            tasks,
+            status,
+            isImportant,
+            excludeStatuses
+          );
 
-        const filteredTasks: TaskInterface[] = tasks.filter(
-          (task: TaskInterface): boolean =>
-            !excludeStatuses.includes(task.status)
-        );
-
-        if (isImportant)
-          this._taskHelperService.importantTasks$.next(
-            filteredTasks.filter(
-              (task: TaskInterface): boolean => task.isImportant
-            )
-          );
-        if (deletedStatus)
-          this._taskHelperService.deletedTasks$.next(
-            filteredTasks.filter(
-              (task: TaskInterface): boolean =>
-                task.status === this.taskStatusEnum.DELETED
-            )
-          );
-        if (finishedStatus)
-          this._taskHelperService.finishedTasks$.next(
-            filteredTasks.filter(
-              (task: TaskInterface): boolean =>
-                task.status === this.taskStatusEnum.FINISHED
-            )
-          );
+        switch (status) {
+          case this.taskStatusEnum.DELETED:
+            this._taskHelperService.deletedTasks$.next(filteredTasks);
+            break;
+          case this.taskStatusEnum.FINISHED:
+            this._taskHelperService.finishedTasks$.next(filteredTasks);
+            break;
+          default:
+            this._taskHelperService.allTasks$.next(filteredTasks);
+            break;
+        }
 
         this._taskHelperService.isLoadingTasks$.next(false);
       }),
@@ -66,7 +57,7 @@ export class TaskService {
     );
   }
 
-  public createTask(data: CreateTaskInterface): Observable<any> {
+  public createTask(data: CreateTaskInterface): Observable<TaskInterface> {
     this._taskHelperService.isLoadingTasks$.next(true);
 
     return this._http

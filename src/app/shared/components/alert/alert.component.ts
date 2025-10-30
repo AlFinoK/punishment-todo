@@ -11,9 +11,8 @@ import { AlertVariantType } from './core/types';
 
 @Component({
   selector: 'app-alert',
-  standalone: true,
   templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.scss'],
+  styleUrl: './alert.component.scss',
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

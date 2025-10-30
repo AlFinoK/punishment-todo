@@ -30,7 +30,7 @@ export class TasksListComponent {
 
   constructor() {}
 
-  public refreshLocalTasks(): void {
+  private _refreshLocalTasks(): void {
     const tasks: TaskInterface[] | null = this.tasks();
     this.localTasks.set(tasks ? [...tasks] : []);
   }
@@ -43,19 +43,20 @@ export class TasksListComponent {
     const fromIndex: number = localTasks.findIndex(
       (task: TaskInterface): boolean => task._id === draggedTask._id
     );
-    const toIndex =
-      event.index !== undefined ? event.index : localTasks.length - 1;
+    const toIndex: number = event.index ? event.index : localTasks.length - 1;
+
+    console.log('To index:', toIndex);
 
     if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return;
 
     const updatedLocalTasks: TaskInterface[] = [...localTasks];
-    const [moved]: TaskInterface[] = updatedLocalTasks.splice(fromIndex, 1);
-    updatedLocalTasks.splice(toIndex, 0, moved);
+    const [movedTask]: TaskInterface[] = updatedLocalTasks.splice(fromIndex, 1);
+    updatedLocalTasks.splice(toIndex, 0, movedTask);
 
     this.localTasks.set(updatedLocalTasks);
   }
 
   ngOnInit(): void {
-    this.refreshLocalTasks();
+    this._refreshLocalTasks();
   }
 }

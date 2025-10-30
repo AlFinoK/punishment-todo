@@ -52,7 +52,6 @@ export class ImportantTasksComponent {
 
           this.importantTasks.set(filteredTasks);
           this.isLoadingTasks.set(false);
-
           this._alertService.open('Tasks successfully loaded', {
             variant: 'success',
           });
@@ -60,7 +59,6 @@ export class ImportantTasksComponent {
 
         (): void => {
           this.isLoadingTasks.set(false);
-
           this._alertService.open('Failed to load tasks', {
             variant: 'error',
           });

@@ -2,9 +2,23 @@
 <form class="task-form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="name">
     <app-input
+      labelPosition="top"
       label="Task Name"
       placeholder="Enter task name"
       formControlName="name"
+    />
+  </div>
+
+  <!-- 
+    ТУТ БУДЕТ END TIME
+  -->
+
+  <div class="isImportant">
+    <app-input
+      labelPosition="right"
+      variant="checkbox"
+      label="Important task"
+      formControlName="isImportant"
     />
   </div>
 
@@ -16,12 +30,14 @@
         formControlName="endDate"
         [config]="datePickerConfig"
       />
+
       <lucide-icon class="icon" name="calendar" />
     </div>
   </div>
 
   <div class="descr">
     <app-input
+      labelPosition="top"
       label="Description"
       placeholder="Task description"
       formControlName="description"
@@ -34,9 +50,8 @@
       [disabled]="isLoadingSubmit()"
       (click)="onSubmit()"
     >
-      {{ isLoadingSubmit() ? "Saving..." : "Add" }}
+      {{ getButtonTextByAction }}
     </app-button>
   </div>
 </form>
-
 }

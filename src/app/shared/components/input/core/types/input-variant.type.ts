@@ -1,1 +1,1 @@
-export type InputVariantType = 'text' | 'password';
+export type InputVariantType = 'text' | 'password' | 'checkbox';

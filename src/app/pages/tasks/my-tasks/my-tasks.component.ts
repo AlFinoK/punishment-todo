@@ -61,7 +61,6 @@ export class MyTasksComponent {
 
           this.tasks.set(filteredTasks);
           this.isLoadingTasks.set(false);
-
           this._alertService.open('Tasks successfully loaded', {
             variant: 'success',
           });
@@ -69,7 +68,6 @@ export class MyTasksComponent {
 
         (): void => {
           this.isLoadingTasks.set(false);
-
           this._alertService.open('Failed to load tasks', {
             variant: 'error',
           });

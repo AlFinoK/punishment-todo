@@ -4,6 +4,13 @@
   border: none;
 }
 
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  margin: 0;
+}
+
 *,
 *::before,
 *::after {
