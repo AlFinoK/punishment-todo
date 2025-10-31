@@ -1,6 +1,7 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 
 import {
+  TaskHelperService,
   TaskInterface,
   TaskService,
   TaskStatusEnum,
@@ -13,7 +14,6 @@ import {
 } from '../common';
 import { Subject, takeUntil } from 'rxjs';
 import { AlertService } from '@shared/components/alert/core';
-import { TaskHelperService } from '@modules/task-module/services/task-helper.service';
 
 @Component({
   selector: 'app-finished-tasks',
@@ -24,26 +24,18 @@ import { TaskHelperService } from '@modules/task-module/services/task-helper.ser
 export class FinishedTasksComponent {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
 
-  public finishedTasks: WritableSignal<TaskInterface[] | null> = signal<
+  protected finishedTasks: WritableSignal<TaskInterface[] | null> = signal<
     TaskInterface[] | null
   >(null);
+  protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
 
   private _destroy$: Subject<void> = new Subject<void>();
-  protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
 
   constructor(
     private _taskService: TaskService,
     private _alertService: AlertService,
     private _taskHelperService: TaskHelperService
   ) {}
-
-  private _listenFinishedTasks(): void {
-    this._taskHelperService.finishedTasks$
-      .pipe(takeUntil(this._destroy$))
-      .subscribe((tasks: TaskInterface[]): void => {
-        this.finishedTasks.set(tasks);
-      });
-  }
 
   private _getFinishedTasks(): void {
     this.isLoadingTasks.set(true);
@@ -75,7 +67,6 @@ export class FinishedTasksComponent {
   }
 
   ngOnInit(): void {
-    this._listenFinishedTasks();
     this._getFinishedTasks();
   }
 }

@@ -6,7 +6,6 @@ import {
   TasksListComponent,
 } from '../common';
 import { TaskInterface, TaskService } from '@modules/task-module';
-import { TaskHelperService } from '@modules/task-module/services/task-helper.service';
 import { Subject, takeUntil } from 'rxjs';
 import { AlertService } from '@shared/components/alert/core';
 
@@ -17,26 +16,17 @@ import { AlertService } from '@shared/components/alert/core';
   imports: [SearchFilterComponent, PageTitleComponent, TasksListComponent],
 })
 export class ImportantTasksComponent {
-  public importantTasks: WritableSignal<TaskInterface[] | null> = signal<
+  protected importantTasks: WritableSignal<TaskInterface[] | null> = signal<
     TaskInterface[] | null
   >(null);
+  protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
 
   private _destroy$: Subject<void> = new Subject<void>();
-  protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
 
   constructor(
     private _taskService: TaskService,
-    private _alertService: AlertService,
-    private _taskHelperService: TaskHelperService
+    private _alertService: AlertService
   ) {}
-
-  private _listenImportantTasks(): void {
-    this._taskHelperService.importantTasks$
-      .pipe(takeUntil(this._destroy$))
-      .subscribe((tasks: TaskInterface[]): void => {
-        this.importantTasks.set(tasks);
-      });
-  }
 
   private _getImportantTasks(): void {
     this.isLoadingTasks.set(true);
@@ -67,7 +57,6 @@ export class ImportantTasksComponent {
   }
 
   ngOnInit(): void {
-    this._listenImportantTasks();
     this._getImportantTasks();
   }
 }

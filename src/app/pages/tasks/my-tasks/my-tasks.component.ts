@@ -2,18 +2,18 @@ import { Subject, takeUntil } from 'rxjs';
 import { Component, signal, WritableSignal } from '@angular/core';
 
 import {
+  TaskHelperService,
   TaskInterface,
   TaskService,
   TaskStatusEnum,
 } from '@modules/task-module';
+import { AlertService } from '@shared/components/alert/core';
 
 import {
   TasksListComponent,
   PageTitleComponent,
   SearchFilterComponent,
 } from '../common';
-import { AlertService } from '@shared/components/alert/core';
-import { TaskHelperService } from '@modules/task-module/services/task-helper.service';
 
 @Component({
   selector: 'app-my-tasks',
@@ -36,14 +36,6 @@ export class MyTasksComponent {
     private _alertService: AlertService,
     private _taskHelperService: TaskHelperService
   ) {}
-
-  private _listenAllTasks(): void {
-    this._taskHelperService.allTasks$
-      .pipe(takeUntil(this._destroy$))
-      .subscribe((tasks: TaskInterface[]): void => {
-        this.tasks.set(tasks);
-      });
-  }
 
   private _getAllTasks(): void {
     this.isLoadingTasks.set(true);
@@ -76,7 +68,6 @@ export class MyTasksComponent {
   }
 
   ngOnInit(): void {
-    this._listenAllTasks();
     this._getAllTasks();
   }
 

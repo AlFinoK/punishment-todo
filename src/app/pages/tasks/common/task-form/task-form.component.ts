@@ -15,7 +15,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import moment, { Moment } from 'moment';
 import { Subject, takeUntil } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -86,6 +85,14 @@ export class TaskFormComponent implements OnInit {
   }
 
   protected onSubmit(): void {
+    if ('create' === this.action()) {
+      this.onSubmitCreateTask();
+    } else {
+      this.onSubmitEditTask();
+    }
+  }
+
+  protected onSubmitCreateTask(): void {
     const formValue: CreateTaskInterface = this.form?.value;
 
     this.isLoadingSubmit.set(true);
@@ -97,9 +104,32 @@ export class TaskFormComponent implements OnInit {
         (): void => {
           this.isLoadingSubmit.set(false);
           this._alertService
-            .open('The task was successfully added!', {
-              variant: 'success',
-            })
+            .open('The task was successfully added!', { variant: 'success' })
+            .subscribe();
+
+          this.formSubmitted.emit();
+        },
+        (error: HttpErrorResponse): void => {
+          const errorMsg: string = error.error.message;
+          this._alertService.open(errorMsg, { variant: 'error' }).subscribe();
+          this.isLoadingSubmit.set(false);
+        }
+      );
+  }
+
+  protected onSubmitEditTask(): void {
+    const formValue: CreateTaskInterface = this.form?.value;
+
+    this.isLoadingSubmit.set(true);
+
+    this._taskService
+      .editTask(formValue, '123')
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(
+        (): void => {
+          this.isLoadingSubmit.set(false);
+          this._alertService
+            .open('The task was successfully edited!', { variant: 'success' })
             .subscribe();
 
           this.formSubmitted.emit();

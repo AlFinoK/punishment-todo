@@ -1,3 +1,4 @@
+import { Subject, takeUntil } from 'rxjs';
 import { Component, signal, WritableSignal } from '@angular/core';
 
 import {
@@ -5,15 +6,13 @@ import {
   TaskService,
   TaskStatusEnum,
 } from '@modules/task-module';
+import { AlertService } from '@shared/components/alert/core';
 
 import {
   SearchFilterComponent,
   PageTitleComponent,
   TasksListComponent,
 } from '../common';
-import { Subject, takeUntil } from 'rxjs';
-import { AlertService } from '@shared/components/alert/core';
-import { TaskHelperService } from '@modules/task-module/services/task-helper.service';
 
 @Component({
   selector: 'app-deleted-tasks',
@@ -24,26 +23,17 @@ import { TaskHelperService } from '@modules/task-module/services/task-helper.ser
 export class DeletedTasksComponent {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
 
-  public deletedTasks: WritableSignal<TaskInterface[] | null> = signal<
+  protected deletedTasks: WritableSignal<TaskInterface[] | null> = signal<
     TaskInterface[] | null
   >(null);
+  protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
 
   private _destroy$: Subject<void> = new Subject<void>();
-  protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
 
   constructor(
     private _taskService: TaskService,
-    private _alertService: AlertService,
-    private _taskHelperService: TaskHelperService
+    private _alertService: AlertService
   ) {}
-
-  private _listenDeletedTasks(): void {
-    this._taskHelperService.finishedTasks$
-      .pipe(takeUntil(this._destroy$))
-      .subscribe((tasks: TaskInterface[]): void => {
-        this.deletedTasks.set(tasks);
-      });
-  }
 
   private _getDeletedTasks(): void {
     this.isLoadingTasks.set(true);
@@ -75,7 +65,6 @@ export class DeletedTasksComponent {
   }
 
   ngOnInit(): void {
-    this._listenDeletedTasks();
     this._getDeletedTasks();
   }
 }

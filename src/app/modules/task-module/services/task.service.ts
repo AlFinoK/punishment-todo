@@ -5,7 +5,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 import { TaskHelperService } from './task-helper.service';
-import { TaskInterface, CreateTaskInterface } from '../interfaces';
+import {
+  TaskInterface,
+  CreateTaskInterface,
+  EditTaskInterface,
+} from '../interfaces';
 import { TaskStatusEnum } from '../enums';
 
 @Injectable({
@@ -19,79 +23,35 @@ export class TaskService {
     private _taskHelperService: TaskHelperService
   ) {}
 
-  public getAllTasks(
-    status: TaskStatusEnum = this.taskStatusEnum.IN_PROGRESS,
-    isImportant?: boolean,
-    excludeStatuses: TaskStatusEnum[] = []
-  ): Observable<TaskInterface[]> {
-    this._taskHelperService.isLoadingTasks$.next(true);
-
-    return this._http.get<TaskInterface[]>(`${environment.api_url}/tasks`).pipe(
-      tap((tasks: TaskInterface[]): void => {
-        const filteredTasks: TaskInterface[] =
-          this._taskHelperService.filterTasks(
-            tasks,
-            status,
-            isImportant,
-            excludeStatuses
-          );
-
-        switch (status) {
-          case this.taskStatusEnum.DELETED:
-            this._taskHelperService.deletedTasks$.next(filteredTasks);
-            break;
-          case this.taskStatusEnum.FINISHED:
-            this._taskHelperService.finishedTasks$.next(filteredTasks);
-            break;
-          default:
-            this._taskHelperService.allTasks$.next(filteredTasks);
-            break;
-        }
-
-        this._taskHelperService.isLoadingTasks$.next(false);
-      }),
-      catchError((error: HttpErrorResponse): never => {
-        this._taskHelperService.isLoadingTasks$.next(false);
-        throw error;
-      })
-    );
+  public getAllTasks(): Observable<TaskInterface[]> {
+    return this._http.get<TaskInterface[]>(`${environment.api_url}/tasks`);
   }
 
   public createTask(data: CreateTaskInterface): Observable<TaskInterface> {
-    this._taskHelperService.isLoadingTasks$.next(true);
-
-    return this._http
-      .post<TaskInterface>(`${environment.api_url}/tasks`, data)
-      .pipe(
-        tap((newTask: TaskInterface): void => {
-          this._taskHelperService.updateTasks(newTask);
-          this._taskHelperService.isLoadingTasks$.next(false);
-        }),
-        catchError((error: HttpErrorResponse): never => {
-          this._taskHelperService.isLoadingTasks$.next(false);
-          throw error;
-        })
-      );
+    return this._http.post<TaskInterface>(`${environment.api_url}/tasks`, data);
   }
 
-  public deleteTaskById(id: string): Observable<any> {
-    this._taskHelperService.isLoadingTasks$.next(true);
-
-    return this._http.delete(`${environment.api_url}/tasks/${id}`).pipe(
-      tap((): void => {
-        const currentTasks: TaskInterface[] =
-          this._taskHelperService.allTasks$.getValue();
-        const updatedTasks: TaskInterface[] = currentTasks.filter(
-          (task: TaskInterface): boolean => task._id !== id
-        );
-
-        this._taskHelperService.allTasks$.next(updatedTasks);
-        this._taskHelperService.isLoadingTasks$.next(false);
-      }),
-      catchError((error: HttpErrorResponse): never => {
-        this._taskHelperService.isLoadingTasks$.next(false);
-        throw error;
-      })
+  public editTask(
+    data: EditTaskInterface,
+    id: string
+  ): Observable<TaskInterface> {
+    return this._http.patch<TaskInterface>(
+      `${environment.api_url}/tasks/${id}`,
+      data
     );
+  }
+
+  public deleteTaskById(id: string): Observable<TaskInterface> {
+    return this._http.delete<TaskInterface>(
+      `${environment.api_url}/tasks/${id}`
+    );
+  }
+
+  public getTaskById(id: string): Observable<TaskInterface> {
+    return this._http.get<TaskInterface>(`${environment.api_url}/tasks/${id}`);
+  }
+
+  public getTaskByStatus(status: string): Observable<any> {
+    return this._http.get(`${environment.api_url}/tasks/status/${status}`);
   }
 }
