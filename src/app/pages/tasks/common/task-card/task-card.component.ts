@@ -20,7 +20,6 @@ import {
 
 import { AlertService } from '@shared/components/alert/core';
 import { TaskFormComponent } from '../task-form/task-form.component';
-import { DndHandleDirective } from 'ngx-drag-drop';
 
 @Component({
   selector: 'app-task-card',
@@ -31,7 +30,6 @@ import { DndHandleDirective } from 'ngx-drag-drop';
     LucideAngularModule,
     BadgeComponent,
     TaskFormComponent,
-    DndHandleDirective,
     InputComponent,
   ],
 })

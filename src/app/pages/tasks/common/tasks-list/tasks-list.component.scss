@@ -1,5 +1,25 @@
 @use "vars" as *;
 @use "mixins" as *;
 
-.tasks-list {
+.tasks-list[dndDropzone] {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.task-wrapper {
+  cursor: grab;
+  transition: transform 0.2s ease;
+}
+
+.task-wrapper.dndDragging {
+  opacity: 0.5;
+}
+
+.task-wrapper.dndDragover {
+  outline: 2px dashed $purple;
+}
+
+.task-wrapper.dndDragging {
+  opacity: 0.4;
 }

@@ -6,10 +6,8 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { DndDropEvent, DndModule } from 'ngx-drag-drop';
-
+import { DndModule, DndDropEvent } from 'ngx-drag-drop';
 import { TaskInterface } from '@modules/task-module';
-
 import { TaskCardComponent } from '../task-card';
 
 @Component({
@@ -23,45 +21,41 @@ export class TasksListComponent {
   public tasks: InputSignal<TaskInterface[] | null> = input<
     TaskInterface[] | null
   >(null);
-
-  // public localTasks: WritableSignal<TaskInterface[]> = signal<TaskInterface[]>(
-  //   []
-  // );
+  protected localTasks: WritableSignal<TaskInterface[]> = signal<
+    TaskInterface[]
+  >([]);
 
   constructor() {}
 
-  // public refreshLocalTasks(): void {
-  //   const tasks: TaskInterface[] | null = this.tasks();
-  //   this.localTasks.set(tasks ? [...tasks] : []);
-  // }
-
-  protected onTaskDrop(event: DndDropEvent): void {
-    // const localTasks: TaskInterface[] = this.localTasks();
-    // if (!localTasks || !localTasks.length) return;
-    // const draggedTask: TaskInterface = event.data;
-    // const fromIndex: number = localTasks.findIndex(
-    //   (task: TaskInterface): boolean => task._id === draggedTask._id
-    // );
-    // const toIndex: number =
-    //   event.index !== undefined ? event.index : localTasks.length - 1;
-    // if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return;
-    // const updatedLocalTasks: TaskInterface[] = [...localTasks];
-    // const [movedTask]: TaskInterface[] = updatedLocalTasks.splice(fromIndex, 1);
-    // updatedLocalTasks.splice(toIndex, 0, movedTask);
-    // this.localTasks.set(updatedLocalTasks);
-
+  private _initTasks(): void {
     const tasks: TaskInterface[] | null = this.tasks();
-    let index: number | undefined = event.index;
+    if (tasks) this.localTasks.set([...tasks]);
+  }
+
+  protected onTaskDrop(event: DndDropEvent, targetTask?: TaskInterface): void {
+    const tasks: TaskInterface[] = [...this.localTasks()];
     const draggedTask: TaskInterface = event.data;
 
-    console.log(event);
-    if (!tasks || !tasks.length) return;
-    if (index !== undefined ? index : tasks.length - 1) return;
+    if (!draggedTask) return;
 
-    tasks.splice(index!, 0, draggedTask);
+    const fromIndex: number = tasks.findIndex(
+      (task: TaskInterface): boolean => task._id === draggedTask._id
+    );
+    if (fromIndex !== -1) tasks.splice(fromIndex, 1);
+
+    if (targetTask) {
+      const toIndex: number = tasks.findIndex(
+        (task: TaskInterface): boolean => task._id === targetTask._id
+      );
+      tasks.splice(toIndex, 0, draggedTask);
+    } else {
+      tasks.push(draggedTask);
+    }
+
+    this.localTasks.set(tasks);
   }
 
   ngOnInit(): void {
-    // this.refreshLocalTasks();
+    this._initTasks();
   }
 }
