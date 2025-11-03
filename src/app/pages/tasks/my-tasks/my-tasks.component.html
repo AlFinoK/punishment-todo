@@ -1,6 +1,9 @@
 <section class="my-tasks">
   <app-search-filter />
-  <app-page-title text="My tasks" />
+
+  <div class="page-title">
+    <h1 class="text">My tasks</h1>
+  </div>
 
   @if(isLoadingTasks()) {
   <div class="loading">loading...</div>

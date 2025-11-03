@@ -5,9 +5,11 @@ import {
   ButtonComponent,
   TagComponent,
   LinkComponent,
-  TagInterface,
   DrawerComponent,
 } from '@shared/components';
+import { tags } from '@shared/data';
+import { TaskTagsInterface } from '@modules/task-module';
+
 import { TaskFormComponent } from '../task-form';
 
 @Component({
@@ -24,24 +26,7 @@ import { TaskFormComponent } from '../task-form';
   ],
 })
 export class NavbarComponent {
-  protected readonly tags: TagInterface[] = [
-    {
-      value: 'productivity',
-      color: 'purple',
-    },
-    {
-      value: 'education',
-      color: 'green',
-    },
-    {
-      value: 'health',
-      color: 'orange',
-    },
-    {
-      value: 'urgently',
-      color: 'red',
-    },
-  ];
+  protected readonly tags: TaskTagsInterface[] = tags;
 
   public isOpenDrawer: WritableSignal<boolean> = signal<boolean>(false);
 

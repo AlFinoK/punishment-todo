@@ -36,20 +36,29 @@
   </div>
 
   <div class="descr">
-    <app-input
-      labelPosition="top"
+    <app-textarea
       label="Description"
       placeholder="Task description"
       formControlName="description"
     />
   </div>
 
+  <div class="tags">
+    <h5>Tags</h5>
+    <div class="tags-inputs">
+      @for(tag of tags; track tag.value) {
+      <app-input
+        labelPosition="right"
+        variant="checkbox"
+        [label]="tag.value | titlecase"
+        [formControlName]="tag.value"
+      />
+      }
+    </div>
+  </div>
+
   <div class="btns">
-    <app-button
-      buttonRole="submit"
-      [disabled]="isLoadingSubmit()"
-      (click)="onSubmit()"
-    >
+    <app-button buttonRole="submit" [disabled]="isLoadingSubmit()">
       {{ getButtonTextByAction }}
     </app-button>
   </div>

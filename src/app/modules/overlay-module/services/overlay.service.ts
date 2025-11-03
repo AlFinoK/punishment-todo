@@ -5,15 +5,19 @@ import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 
 @Injectable({ providedIn: 'root' })
 export class OverlayService {
-  constructor(private overlay: Overlay, private injector: Injector) {}
+  constructor(private _overlay: Overlay, private _injector: Injector) {}
 
   public open<T>(
     component: Type<T>,
     config?: OverlayConfig
   ): { overlayRef: OverlayRef; componentRef: ComponentRef<T> } {
-    const overlayRef = this.overlay.create(config);
-    const portal = new ComponentPortal(component, null, this.injector);
-    const componentRef = overlayRef.attach(portal);
+    const overlayRef: OverlayRef = this._overlay.create(config);
+    const portal: ComponentPortal<T> = new ComponentPortal(
+      component,
+      null,
+      this._injector
+    );
+    const componentRef: ComponentRef<T> = overlayRef.attach(portal);
     return { overlayRef, componentRef };
   }
 

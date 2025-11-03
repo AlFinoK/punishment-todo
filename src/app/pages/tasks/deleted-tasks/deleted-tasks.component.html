@@ -1,12 +1,23 @@
 <section class="deleted-tasks">
   <app-search-filter />
-  <app-page-title text="Deleted tasks" />
+
+  <div class="page-title">
+    <h1 class="text">Deleted tasks</h1>
+  </div>
 
   @if(isLoadingTasks()) {
   <div class="loading">loading...</div>
-  } @else if(!deletedTasks()?.length) {
+  } @else if(!displayedTasks()?.length) {
   <p class="empty">No tasks</p>
   } @else {
-  <app-tasks-list [tasks]="deletedTasks()" />
+  <app-tasks-list [tasks]="displayedTasks()" />
+
   }
+
+  <app-pagination
+    [totalItems]="deletedTasks()?.length"
+    [itemsPerPage]="tasksPerPage"
+    [currentPage]="currentPage()"
+    (loadMore)="onLoadMore()"
+  />
 </section>

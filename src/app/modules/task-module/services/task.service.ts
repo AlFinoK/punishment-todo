@@ -4,13 +4,13 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
 
-import { TaskHelperService } from './task-helper.service';
 import {
   TaskInterface,
   CreateTaskInterface,
   EditTaskInterface,
 } from '../interfaces';
 import { TaskStatusEnum } from '../enums';
+import { TaskHelperService } from './task-helper.service';
 
 @Injectable({
   providedIn: 'root',

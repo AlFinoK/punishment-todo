@@ -1,0 +1,40 @@
+@use "vars" as *;
+@use "mixins" as *;
+
+.textarea {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+}
+
+.textarea-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.textarea-input {
+  width: 100%;
+  min-height: 144px;
+  padding: 7px 14px;
+  border: 1px solid $primary-border;
+  border-radius: 6px;
+  resize: vertical;
+  font-size: 12px;
+  font-weight: 400;
+  max-height: 250px;
+
+  &::placeholder {
+    color: $placeholder-color;
+  }
+
+  &:focus,
+  &:hover {
+    border: 1px solid $purple;
+  }
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 400;
+}

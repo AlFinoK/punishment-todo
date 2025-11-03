@@ -5,8 +5,8 @@ import {
   InputSignal,
 } from '@angular/core';
 
-import { BadgeValueType } from './core';
 import { TitleCasePipe } from '@angular/common';
+import { TaskTagValueEnum } from '@modules/task-module';
 
 @Component({
   selector: 'app-badge',
@@ -16,7 +16,11 @@ import { TitleCasePipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeComponent {
-  public badgeValue: InputSignal<string> = input<string>('productivity');
+  protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
+    TaskTagValueEnum;
+  public badgeValue: InputSignal<string> = input<string>(
+    this.taskTagValueEnum.PRODUCTIVITY
+  );
 
   constructor() {}
 }

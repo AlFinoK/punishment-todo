@@ -7,7 +7,9 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { DndModule, DndDropEvent } from 'ngx-drag-drop';
+
 import { TaskInterface } from '@modules/task-module';
+
 import { TaskCardComponent } from '../task-card';
 
 @Component({
@@ -32,7 +34,7 @@ export class TasksListComponent {
     if (tasks) this.localTasks.set([...tasks]);
   }
 
-  protected onTaskDrop(event: DndDropEvent, targetTask?: TaskInterface): void {
+  protected onTaskDrop(event: DndDropEvent, targetTask: TaskInterface): void {
     const tasks: TaskInterface[] = [...this.localTasks()];
     const draggedTask: TaskInterface = event.data;
 
@@ -47,6 +49,7 @@ export class TasksListComponent {
       const toIndex: number = tasks.findIndex(
         (task: TaskInterface): boolean => task._id === targetTask._id
       );
+
       tasks.splice(toIndex, 0, draggedTask);
     } else {
       tasks.push(draggedTask);

@@ -11,7 +11,6 @@ import {
   input,
   output,
   OutputEmitterRef,
-  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
@@ -24,37 +23,39 @@ import { LucideAngularModule } from 'lucide-angular';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrawerComponent implements OnInit, OnDestroy {
-  public isOpen: InputSignal<boolean> = input(false);
-  public closeDrawer: OutputEmitterRef<boolean> = output();
+  public isOpen: InputSignal<boolean> = input<boolean>(false);
+  public closeDrawer: OutputEmitterRef<boolean> = output<boolean>();
 
   @ViewChild('drawerTemplate', { static: true })
-  drawerTemplate: TemplateRef<unknown> | undefined;
+  protected drawerTemplate: TemplateRef<unknown> | undefined;
 
-  private renderer: Renderer2 = inject(Renderer2);
-  private viewContainerRef: ViewContainerRef = inject(ViewContainerRef);
+  private bodyHost?: HTMLElement | null;
 
-  private bodyHost?: HTMLElement;
+  constructor(
+    private _renderer: Renderer2,
+    private _viewContainerRef: ViewContainerRef
+  ) {}
 
   private _createBodyContainer(): void {
-    this.bodyHost = this.renderer.createElement('div');
-    this.renderer.addClass(this.bodyHost, 'drawer-root');
-    this.renderer.appendChild(document.body, this.bodyHost);
+    this.bodyHost = this._renderer.createElement('div');
+    this._renderer.addClass(this.bodyHost, 'drawer-root');
+    this._renderer.appendChild(document.body, this.bodyHost);
   }
 
   private _moveDrawerToBody(): void {
     if (!this.drawerTemplate || !this.bodyHost) return;
 
     const view = this.drawerTemplate.createEmbeddedView(null);
-    this.viewContainerRef.insert(view);
+    this._viewContainerRef.insert(view);
 
     view.rootNodes.forEach((node) => {
-      this.renderer.appendChild(this.bodyHost, node);
+      this._renderer.appendChild(this.bodyHost, node);
     });
   }
 
   private _removeBodyContainer(): void {
     if (this.bodyHost && document.body.contains(this.bodyHost)) {
-      this.renderer.removeChild(document.body, this.bodyHost);
+      this._renderer.removeChild(document.body, this.bodyHost);
     }
   }
 

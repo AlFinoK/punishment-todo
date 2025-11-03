@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { TagColorType, TagValueType, TagVariantType } from './core';
 import { TitleCasePipe } from '@angular/common';
+import { TaskTagValueEnum } from '@modules/task-module';
 
 @Component({
   selector: 'app-tag',
@@ -17,11 +18,14 @@ import { TitleCasePipe } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagComponent {
+  protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
+    TaskTagValueEnum;
+
   public tagVariant: InputSignal<TagVariantType> =
     input<TagVariantType>('primary');
-  public tagColor: InputSignal<TagColorType> = input<TagColorType>('purple');
-  public tagValue: InputSignal<TagValueType> =
-    input<TagValueType>('productivity');
+  public tagValue: InputSignal<TaskTagValueEnum> = input<TaskTagValueEnum>(
+    this.taskTagValueEnum.PRODUCTIVITY
+  );
   public tagClick: OutputEmitterRef<void> = output<void>();
 
   protected onTagClick(): void {

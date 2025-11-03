@@ -1,10 +1,6 @@
 import { Component, signal, WritableSignal } from '@angular/core';
 
-import {
-  SearchFilterComponent,
-  PageTitleComponent,
-  TasksListComponent,
-} from '../common';
+import { SearchFilterComponent, TasksListComponent } from '../common';
 import { TaskInterface, TaskService } from '@modules/task-module';
 import { Subject, takeUntil } from 'rxjs';
 import { AlertService } from '@shared/components/alert/core';
@@ -13,7 +9,7 @@ import { AlertService } from '@shared/components/alert/core';
   selector: 'app-important-tasks',
   templateUrl: './important-tasks.component.html',
   styleUrl: './important-tasks.component.scss',
-  imports: [SearchFilterComponent, PageTitleComponent, TasksListComponent],
+  imports: [SearchFilterComponent, TasksListComponent],
 })
 export class ImportantTasksComponent {
   protected importantTasks: WritableSignal<TaskInterface[] | null> = signal<

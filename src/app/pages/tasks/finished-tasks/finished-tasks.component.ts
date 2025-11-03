@@ -1,3 +1,4 @@
+import { Subject, takeUntil } from 'rxjs';
 import { Component, signal, WritableSignal } from '@angular/core';
 
 import {
@@ -6,20 +7,15 @@ import {
   TaskService,
   TaskStatusEnum,
 } from '@modules/task-module';
-
-import {
-  SearchFilterComponent,
-  PageTitleComponent,
-  TasksListComponent,
-} from '../common';
-import { Subject, takeUntil } from 'rxjs';
 import { AlertService } from '@shared/components/alert/core';
+
+import { SearchFilterComponent, TasksListComponent } from '../common';
 
 @Component({
   selector: 'app-finished-tasks',
   templateUrl: './finished-tasks.component.html',
   styleUrl: './finished-tasks.component.scss',
-  imports: [SearchFilterComponent, PageTitleComponent, TasksListComponent],
+  imports: [SearchFilterComponent, TasksListComponent],
 })
 export class FinishedTasksComponent {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;

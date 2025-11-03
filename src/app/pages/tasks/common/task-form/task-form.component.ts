@@ -16,15 +16,26 @@ import {
   Validators,
 } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
+import { TitleCasePipe } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DpDatePickerModule, IDatePickerConfig } from 'ng2-date-picker';
 
+import {
+  ButtonComponent,
+  InputComponent,
+  TextareaComponent,
+} from '@shared/components';
+import {
+  CreateTaskInterface,
+  TaskService,
+  TaskTagsInterface,
+  TaskTagValueEnum,
+} from '@modules/task-module';
+import { tags } from '@shared/data';
 import { AlertService } from '@shared/components/alert/core';
-import { ButtonComponent, InputComponent } from '@shared/components';
-import { CreateTaskInterface, TaskService } from '@modules/task-module';
+
 import { TaskFormActionType } from './core';
-import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-task-form',
@@ -33,13 +44,19 @@ import dayjs from 'dayjs';
   imports: [
     LucideAngularModule,
     ButtonComponent,
-    InputComponent,
     DpDatePickerModule,
     ReactiveFormsModule,
+    TitleCasePipe,
+    InputComponent,
+    TextareaComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskFormComponent implements OnInit {
+  protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
+    TaskTagValueEnum;
+  protected readonly tags: TaskTagsInterface[] = tags;
+
   public action: InputSignal<TaskFormActionType> =
     input<TaskFormActionType>('create');
   public formSubmitted: OutputEmitterRef<void> = output<void>();
@@ -47,14 +64,14 @@ export class TaskFormComponent implements OnInit {
   private _destroy$: Subject<void> = new Subject<void>();
 
   protected isLoadingSubmit: WritableSignal<boolean> = signal(false);
-
-  protected currentDate: string = dayjs().format('YYYY-MM-DD');
+  protected currentDate: string = new Date().toISOString().split('T')[0];
   protected form: FormGroup | null = null;
 
   protected datePickerConfig: IDatePickerConfig = {
     format: 'YYYY-MM-DD',
     firstDayOfWeek: 'mo',
-    min: dayjs(),
+    min: this.currentDate,
+    showNearMonthDays: false,
   };
 
   protected get getButtonTextByAction() {
@@ -80,7 +97,7 @@ export class TaskFormComponent implements OnInit {
       isImportant: [false],
       endTime: [null, Validators.required],
       endDate: [this.currentDate, Validators.required],
-      tags: [null, Validators.required],
+      tags: [this.taskTagValueEnum, Validators.required],
     });
   }
 

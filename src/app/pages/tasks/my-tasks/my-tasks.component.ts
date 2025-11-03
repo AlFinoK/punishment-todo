@@ -9,17 +9,13 @@ import {
 } from '@modules/task-module';
 import { AlertService } from '@shared/components/alert/core';
 
-import {
-  TasksListComponent,
-  PageTitleComponent,
-  SearchFilterComponent,
-} from '../common';
+import { TasksListComponent, SearchFilterComponent } from '../common';
 
 @Component({
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrl: './my-tasks.component.scss',
-  imports: [TasksListComponent, PageTitleComponent, SearchFilterComponent],
+  imports: [TasksListComponent, SearchFilterComponent],
 })
 export class MyTasksComponent {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;

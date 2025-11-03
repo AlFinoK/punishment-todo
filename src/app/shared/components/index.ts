@@ -5,3 +5,4 @@ export * from './link';
 export * from './drawer';
 export * from './alert';
 export * from './input';
+export * from './textarea';

@@ -12,19 +12,19 @@
     width: 10px;
     border-radius: 50px;
 
-    &.purple {
+    &.productivity {
       background-color: $purple;
     }
 
-    &.red {
+    &.health {
       background-color: $negative;
     }
 
-    &.green {
+    &.education {
       background-color: $success;
     }
 
-    &.orange {
+    &.urgently {
       background-color: $danger;
     }
   }
