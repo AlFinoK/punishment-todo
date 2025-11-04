@@ -14,9 +14,8 @@
   -->
 
   <div class="isImportant">
-    <app-input
+    <app-checkbox
       labelPosition="right"
-      variant="checkbox"
       label="Important task"
       formControlName="isImportant"
     />
@@ -45,13 +44,12 @@
 
   <div class="tags">
     <h5>Tags</h5>
-    <div class="tags-inputs">
-      @for(tag of tags; track tag.value) {
-      <app-input
+    <div class="tags-inputs" formArrayName="tags">
+      @for(tag of tags; track tag.value; let idx = $index) {
+      <app-checkbox
         labelPosition="right"
-        variant="checkbox"
         [label]="tag.value | titlecase"
-        [formControlName]="tag.value"
+        [formControlName]="idx"
       />
       }
     </div>

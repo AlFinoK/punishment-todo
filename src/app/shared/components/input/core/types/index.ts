@@ -1,1 +1,2 @@
-export type { InputVariantType } from './input-variant.type';
+export type { InputRoleType } from './input-role.type';
+export type { InputLabelPositionType } from './input-label-position.type';

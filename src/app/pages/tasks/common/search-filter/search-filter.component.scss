@@ -5,16 +5,19 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 1px solid $primary-border;
-  padding: 20px 40px;
+  position: relative;
+
+  .btn {
+    position: absolute;
+    left: 0;
+  }
+
+  .input {
+    width: 100%;
+  }
 
   .icon {
     width: 18px;
     height: 18px;
-  }
-
-  .input {
-    font-size: 14px;
-    line-height: 21px;
   }
 }

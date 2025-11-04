@@ -1,0 +1,7 @@
+<ng-template #modalTemplate>
+  <div class="modal" [class.open]="isOpen()" (click)="onCloseModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-template>

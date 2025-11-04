@@ -1,13 +1,11 @@
 import {
   Component,
-  Input,
-  Output,
-  EventEmitter,
   InputSignal,
   input,
   OutputEmitterRef,
   output,
 } from '@angular/core';
+
 import { ButtonComponent } from '@shared/components';
 
 @Component({
@@ -17,8 +15,8 @@ import { ButtonComponent } from '@shared/components';
   imports: [ButtonComponent],
 })
 export class PaginationComponent {
-  public totalItems: InputSignal<number | null> = input<number | null>(null);
-  public itemsPerPage: InputSignal<number> = input<number>(1);
+  public totalItems: InputSignal<number> = input<number>(0);
+  public itemsPerPage: InputSignal<number> = input<number>(8);
   public currentPage: InputSignal<number> = input<number>(1);
 
   public loadMore: OutputEmitterRef<void> = output<void>();
@@ -29,6 +27,10 @@ export class PaginationComponent {
 
   get nextPage(): number {
     return this.currentPage() + 1;
+  }
+
+  get qty(): number {
+    return this.totalItems() - this.currentPage() * this.itemsPerPage();
   }
 
   onLoadMore(): void {

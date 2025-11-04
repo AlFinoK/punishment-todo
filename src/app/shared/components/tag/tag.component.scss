@@ -6,6 +6,19 @@
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  padding: 10px;
+  border: 1px solid transparent;
+
+  &:hover {
+    .text {
+      color: $gray;
+    }
+  }
+
+  &.active {
+    border: 1px solid $purple;
+    border-radius: 6px;
+  }
 
   .circle {
     height: 10px;
@@ -33,9 +46,5 @@
     color: $white;
     font-weight: 500;
     transition: color 0.2s ease;
-
-    &:hover {
-      color: $gray;
-    }
   }
 }

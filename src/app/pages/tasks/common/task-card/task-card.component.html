@@ -1,25 +1,21 @@
-<div class="task-card">
+<div class="task-card" (click)="openDrawer()">
   <div class="left">
-    <app-input class="checkbox" variant="checkbox" />
+    <app-checkbox />
     <p class="title">{{ task()?.name }}</p>
   </div>
 
   <div class="right">
-    @for (tag of task()?.tags; track tag) {
     <div class="badges">
+      @for (tag of task()?.tags; track tag) {
       <app-badge [badgeValue]="tag" [id]="$index" />
+      }
     </div>
-    }
 
     <div class="time">
       <p class="date">{{ task()?.endDate }}</p>
     </div>
 
-    <app-button
-      (buttonClick)="onDeleteTask(task()?._id)"
-      [size]="'none'"
-      [variant]="'clear'"
-    >
+    <app-button (buttonClick)="openModal()" [size]="'none'" [variant]="'clear'">
       <lucide-icon class="icon" name="trash" />
     </app-button>
 
@@ -33,5 +29,23 @@
   <app-task-form />
 </ng-template>
 
-<!-- [isOpenDrawer]="isOpenDrawer()"
-  (toggleDrawer)="onOpenDrawer($event)" -->
+<app-drawer [isOpen]="isOpenDrawer()" (closeDrawer)="closeDrawer()">
+  <app-task-form (formSubmitted)="closeDrawer()" />
+</app-drawer>
+
+<app-modal [isOpen]="isOpenModal()" (closeModal)="closeModal()">
+  <div class="modal">
+    <img class="modal-img" src="warning.svg" />
+
+    <h3 class="modal-title">Are you sure?</h3>
+    <p class="modal-descr">You won't to recover this task</p>
+    <div class="modal-btns">
+      <app-button (buttonClick)="onDeleteTask(task()?._id)">
+        Yes, delete
+      </app-button>
+      <app-button (buttonClick)="closeModal()" [variant]="'outline'">
+        Cancel
+      </app-button>
+    </div>
+  </div>
+</app-modal>

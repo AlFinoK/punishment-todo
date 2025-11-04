@@ -2,15 +2,13 @@
 @use "mixins" as *;
 
 .textarea {
-  display: flex;
-  flex-direction: column;
+  @include flex-column();
   width: 100%;
   gap: 4px;
 }
 
 .textarea-inner {
-  display: flex;
-  flex-direction: column;
+  @include flex-column();
 }
 
 .textarea-input {
@@ -20,7 +18,7 @@
   border: 1px solid $primary-border;
   border-radius: 6px;
   resize: vertical;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   max-height: 250px;
 
@@ -35,6 +33,6 @@
 }
 
 .label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
 }

@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,9 +7,8 @@ import {
   output,
   OutputEmitterRef,
 } from '@angular/core';
-import { TagColorType, TagValueType, TagVariantType } from './core';
-import { TitleCasePipe } from '@angular/common';
-import { TaskTagValueEnum } from '@modules/task-module';
+import { TaskHelperService, TaskTagsInterface } from '@modules/task-module';
+import { tags } from '@shared/data';
 
 @Component({
   selector: 'app-tag',
@@ -18,19 +18,24 @@ import { TaskTagValueEnum } from '@modules/task-module';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagComponent {
-  protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
-    TaskTagValueEnum;
+  protected readonly tags: TaskTagsInterface[] = tags;
 
-  public tagVariant: InputSignal<TagVariantType> =
-    input<TagVariantType>('primary');
-  public tagValue: InputSignal<TaskTagValueEnum> = input<TaskTagValueEnum>(
-    this.taskTagValueEnum.PRODUCTIVITY
+  public tag: InputSignal<TaskTagsInterface> = input<TaskTagsInterface>(
+    this.tags[0]
   );
   public tagClick: OutputEmitterRef<void> = output<void>();
+
+  get isActive(): boolean {
+    const tag: TaskTagsInterface = this.tag();
+
+    return this._taskHelperService.activeTags$.value.some(
+      (activeTag: TaskTagsInterface): boolean => activeTag.value === tag.value
+    );
+  }
+
+  constructor(private _taskHelperService: TaskHelperService) {}
 
   protected onTagClick(): void {
     this.tagClick.emit();
   }
-
-  constructor() {}
 }

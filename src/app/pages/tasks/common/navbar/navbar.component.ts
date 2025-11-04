@@ -7,10 +7,16 @@ import {
   LinkComponent,
   DrawerComponent,
 } from '@shared/components';
+import {
+  TaskHelperService,
+  TaskTagsInterface,
+  TaskTagValueEnum,
+} from '@modules/task-module';
 import { tags } from '@shared/data';
-import { TaskTagsInterface } from '@modules/task-module';
 
 import { TaskFormComponent } from '../task-form';
+import { navbarLinks } from '@shared/data/navbarLinks';
+import { NavbarLinksInterface } from '@shared/interfaces';
 
 @Component({
   selector: 'app-navbar',
@@ -26,11 +32,14 @@ import { TaskFormComponent } from '../task-form';
   ],
 })
 export class NavbarComponent {
+  protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
+    TaskTagValueEnum;
   protected readonly tags: TaskTagsInterface[] = tags;
+  protected readonly navbarLinks: NavbarLinksInterface[] = navbarLinks;
 
   public isOpenDrawer: WritableSignal<boolean> = signal<boolean>(false);
 
-  constructor() {}
+  constructor(private _taskHelperService: TaskHelperService) {}
 
   protected openDrawer(): void {
     this.isOpenDrawer.set(true);
@@ -38,5 +47,9 @@ export class NavbarComponent {
 
   protected closeDrawer(): void {
     this.isOpenDrawer.set(false);
+  }
+
+  protected filterTasksByTag(value: TaskTagsInterface): void {
+    this._taskHelperService.filterTasksByTag(value);
   }
 }

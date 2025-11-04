@@ -14,14 +14,17 @@
     background-color: $bg;
   }
 
-  .left {
-  }
-
   .left,
   .right {
     display: flex;
     align-items: center;
     gap: 20px;
+  }
+
+  .badges {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   .right {
@@ -35,5 +38,33 @@
       align-items: center;
       gap: 10px;
     }
+  }
+}
+
+.modal {
+  @include flex-column();
+  align-items: center;
+
+  &-img {
+    margin-bottom: 18px;
+    width: 80px;
+    height: 80px;
+  }
+
+  &-title {
+    margin-bottom: 8px;
+    font-size: 21px;
+  }
+
+  &-descr {
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+    margin-bottom: 26px;
+  }
+
+  &-btns {
+    display: flex;
+    gap: 12px;
   }
 }

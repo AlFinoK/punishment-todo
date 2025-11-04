@@ -9,27 +9,27 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { InputRoleType, InputLabelPositionType } from './core';
+import { CheckboxLabelPositionType } from './core';
 
 @Component({
-  selector: 'app-input',
-  templateUrl: './input.component.html',
-  styleUrl: './input.component.scss',
+  selector: 'app-checkbox',
+  templateUrl: './checkbox.component.html',
+  styleUrl: './checkbox.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef((): typeof InputComponent => InputComponent),
+      useExisting: forwardRef(
+        (): typeof CheckboxComponent => CheckboxComponent
+      ),
       multi: true,
     },
   ],
 })
-export class InputComponent implements ControlValueAccessor {
-  public labelPosition: InputSignal<InputLabelPositionType> =
-    input<InputLabelPositionType>('left');
+export class CheckboxComponent implements ControlValueAccessor {
+  public labelPosition: InputSignal<CheckboxLabelPositionType> =
+    input<CheckboxLabelPositionType>('left');
   public label: InputSignal<string> = input<string>('');
-  public placeholder: InputSignal<string> = input<string>('');
-  public inputRole: InputSignal<InputRoleType> = input<InputRoleType>('text');
 
   protected value: WritableSignal<string> = signal('');
 
@@ -50,7 +50,7 @@ export class InputComponent implements ControlValueAccessor {
 
   protected onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.value.set(target.value);
+    this.value.set(target.checked ? 'true' : '');
     this.onChange(this.value());
   }
 

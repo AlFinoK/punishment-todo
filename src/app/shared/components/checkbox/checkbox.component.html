@@ -1,0 +1,16 @@
+<div [class]="['checkbox-container', labelPosition()]">
+  @if(label()) {
+  <label class="label">{{ label() }}</label>
+  }
+
+  <div class="checkbox-container-inner">
+    <input
+      class="checkbox"
+      type="checkbox"
+      [checked]="value() === 'true'"
+      (change)="onInputChange($event)"
+      (click)="onInputChange($event)"
+      (blur)="onBlur()"
+    />
+  </div>
+</div>

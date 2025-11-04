@@ -1,5 +1,6 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+
 import {
   TaskInterface,
   TaskService,
@@ -7,8 +8,11 @@ import {
 } from '@modules/task-module';
 import { AlertService } from '@shared/components/alert/core';
 
-import { SearchFilterComponent, TasksListComponent } from '../common';
-import { PaginationComponent } from '../common/pagination/pagination.component';
+import {
+  PaginationComponent,
+  SearchFilterComponent,
+  TasksListComponent,
+} from '../common';
 
 @Component({
   selector: 'app-deleted-tasks',
@@ -27,9 +31,13 @@ export class DeletedTasksComponent implements OnInit {
   >(null);
   protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
   protected currentPage: WritableSignal<number> = signal<number>(1);
-  protected tasksPerPage: number = 1;
+  protected tasksPerPage: number = 8;
 
   private _destroy$: Subject<void> = new Subject<void>();
+
+  get totalItems(): number {
+    return this.deletedTasks()?.length || 0;
+  }
 
   constructor(
     private _taskService: TaskService,
@@ -52,29 +60,33 @@ export class DeletedTasksComponent implements OnInit {
           this.displayedTasks.set(filteredTasks.slice(0, this.tasksPerPage));
 
           this.isLoadingTasks.set(false);
-          this._alertService.open('Tasks successfully loaded', {
-            variant: 'success',
-          });
+          this._alertService
+            .open('Tasks successfully loaded', {
+              variant: 'success',
+            })
+            .subscribe();
         },
         (): void => {
           this.isLoadingTasks.set(false);
-          this._alertService.open('Failed to load tasks', { variant: 'error' });
+          this._alertService
+            .open('Failed to load tasks', { variant: 'error' })
+            .subscribe();
         }
       );
   }
 
   protected onLoadMore(): void {
-    const current = this.displayedTasks();
-    const allTasks = this.deletedTasks();
+    const displayedTasks: TaskInterface[] | null = this.displayedTasks();
+    const deletedTasks: TaskInterface[] | null = this.deletedTasks();
 
-    if (allTasks && current) {
+    if (deletedTasks && displayedTasks) {
       const nextPage: number = this.currentPage() + 1;
-      const newTasks: TaskInterface[] = allTasks.slice(
+      const newTasks: TaskInterface[] = deletedTasks.slice(
         nextPage * this.tasksPerPage,
         (nextPage + 1) * this.tasksPerPage
       );
 
-      this.displayedTasks.set([...current, ...newTasks]);
+      this.displayedTasks.set([...displayedTasks, ...newTasks]);
       this.currentPage.set(nextPage);
     }
   }

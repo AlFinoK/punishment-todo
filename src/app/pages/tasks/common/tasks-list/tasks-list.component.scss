@@ -2,8 +2,7 @@
 @use "mixins" as *;
 
 .tasks-list[dndDropzone] {
-  display: flex;
-  flex-direction: column;
+  @include flex-column();
   gap: 8px;
 }
 

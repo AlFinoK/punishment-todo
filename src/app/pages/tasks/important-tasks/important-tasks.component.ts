@@ -24,7 +24,7 @@ export class ImportantTasksComponent {
     private _alertService: AlertService
   ) {}
 
-  private _getImportantTasks(): void {
+  private _getAllTasks(): void {
     this.isLoadingTasks.set(true);
 
     this._taskService
@@ -53,6 +53,6 @@ export class ImportantTasksComponent {
   }
 
   ngOnInit(): void {
-    this._getImportantTasks();
+    this._getAllTasks();
   }
 }

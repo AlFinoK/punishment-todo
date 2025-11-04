@@ -1,0 +1,28 @@
+@use "vars" as *;
+@use "mixins" as *;
+
+.modal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  height: 100%;
+  @include flex-jc-ac();
+
+  &.open {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    pointer-events: auto;
+    @include flex-jc-ac();
+  }
+
+  .modal-content {
+    background-color: $dashboard-bg;
+    min-width: 512px;
+    min-height: 300px;
+    border-radius: 6px;
+    padding: 40px 0;
+  }
+}

@@ -6,11 +6,11 @@ import {
   OutputEmitterRef,
   WritableSignal,
   OnInit,
-  InputSignal,
-  input,
 } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -34,8 +34,7 @@ import {
 } from '@modules/task-module';
 import { tags } from '@shared/data';
 import { AlertService } from '@shared/components/alert/core';
-
-import { TaskFormActionType } from './core';
+import { CheckboxComponent } from '@shared/components/checkbox';
 
 @Component({
   selector: 'app-task-form',
@@ -49,6 +48,7 @@ import { TaskFormActionType } from './core';
     TitleCasePipe,
     InputComponent,
     TextareaComponent,
+    CheckboxComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -57,8 +57,6 @@ export class TaskFormComponent implements OnInit {
     TaskTagValueEnum;
   protected readonly tags: TaskTagsInterface[] = tags;
 
-  public action: InputSignal<TaskFormActionType> =
-    input<TaskFormActionType>('create');
   public formSubmitted: OutputEmitterRef<void> = output<void>();
 
   private _destroy$: Subject<void> = new Subject<void>();
@@ -75,13 +73,11 @@ export class TaskFormComponent implements OnInit {
   };
 
   protected get getButtonTextByAction() {
-    return this.isLoadingSubmit()
-      ? this.action() === 'create'
-        ? 'Saving...'
-        : 'Editing...'
-      : this.action() === 'create'
-      ? 'Add'
-      : 'Edit';
+    return this.isLoadingSubmit() ? 'Saving...' : 'save';
+  }
+
+  get formTags(): FormArray {
+    return this.form?.get('tags') as FormArray;
   }
 
   constructor(
@@ -97,20 +93,30 @@ export class TaskFormComponent implements OnInit {
       isImportant: [false],
       endTime: [null, Validators.required],
       endDate: [this.currentDate, Validators.required],
-      tags: [this.taskTagValueEnum, Validators.required],
+      tags: this._formBuilder.array(
+        this.tags.map((): boolean => false),
+        Validators.required
+      ),
     });
   }
 
-  protected onSubmit(): void {
-    if ('create' === this.action()) {
-      this.onSubmitCreateTask();
-    } else {
-      this.onSubmitEditTask();
-    }
+  protected onSubmit(taskId?: string): void {
+    if (taskId) this.onSubmitEditTask(taskId);
+    else this.onSubmitCreateTask();
   }
 
   protected onSubmitCreateTask(): void {
-    const formValue: CreateTaskInterface = this.form?.value;
+    if (!this.form) return;
+
+    const formValue: CreateTaskInterface = this.form.value;
+
+    const selectedTags: string[] = this.formTags.controls
+      .map((control, idx: number): string | null =>
+        control.value ? this.tags[idx].value : null
+      )
+      .filter((tag: string | null) => tag != null);
+
+    formValue.tags = selectedTags;
 
     this.isLoadingSubmit.set(true);
 
@@ -134,13 +140,13 @@ export class TaskFormComponent implements OnInit {
       );
   }
 
-  protected onSubmitEditTask(): void {
+  protected onSubmitEditTask(taskId: string): void {
     const formValue: CreateTaskInterface = this.form?.value;
 
     this.isLoadingSubmit.set(true);
 
     this._taskService
-      .editTask(formValue, '123')
+      .editTask(formValue, taskId)
       .pipe(takeUntil(this._destroy$))
       .subscribe(
         (): void => {
@@ -161,5 +167,6 @@ export class TaskFormComponent implements OnInit {
 
   ngOnInit(): void {
     this._initForm();
+    this.formTags;
   }
 }

@@ -1,10 +1,10 @@
 <a
-  [class]="['link', size()]"
+  class="link"
   [routerLink]="routerLink()"
   routerLinkActive="active"
   [routerLinkActiveOptions]="{ exact: true }"
 >
-  <p class="content">
+  <p [class]="['content', size()]">
     <ng-content></ng-content>
   </p>
 </a>

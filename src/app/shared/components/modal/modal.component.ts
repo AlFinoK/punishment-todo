@@ -14,21 +14,20 @@ import {
   EmbeddedViewRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
-  selector: 'app-drawer',
-  templateUrl: './drawer.component.html',
-  styleUrl: './drawer.component.scss',
-  imports: [CommonModule, LucideAngularModule],
+  selector: 'app-modal',
+  templateUrl: './modal.component.html',
+  styleUrl: './modal.component.scss',
+  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DrawerComponent implements OnInit, OnDestroy {
+export class ModalComponent implements OnInit, OnDestroy {
   public isOpen: InputSignal<boolean> = input<boolean>(false);
-  public closeDrawer: OutputEmitterRef<boolean> = output<boolean>();
+  public closeModal: OutputEmitterRef<boolean> = output<boolean>();
 
-  @ViewChild('drawerTemplate', { static: true })
-  protected drawerTemplate: TemplateRef<unknown> | undefined;
+  @ViewChild('modalTemplate', { static: true })
+  protected modalTemplate: TemplateRef<unknown> | undefined;
 
   private _bodyHost?: HTMLElement | null;
 
@@ -39,15 +38,15 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
   private _createBodyContainer(): void {
     this._bodyHost = this._renderer.createElement('div');
-    this._renderer.addClass(this._bodyHost, 'drawer-root');
+    this._renderer.addClass(this._bodyHost, 'modal-root');
     this._renderer.appendChild(document.body, this._bodyHost);
   }
 
-  private _moveDrawerToBody(): void {
-    if (!this.drawerTemplate || !this._bodyHost) return;
+  private _moveModalToBody(): void {
+    if (!this.modalTemplate || !this._bodyHost) return;
 
     const view: EmbeddedViewRef<unknown> =
-      this.drawerTemplate.createEmbeddedView(null);
+      this.modalTemplate.createEmbeddedView(null);
     this._viewContainerRef.insert(view);
 
     view.rootNodes.forEach((node: Node): void => {
@@ -61,13 +60,13 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onCloseDrawer(): void {
-    this.closeDrawer.emit(false);
+  protected onCloseModal(): void {
+    this.closeModal.emit(false);
   }
 
   ngOnInit(): void {
     this._createBodyContainer();
-    this._moveDrawerToBody();
+    this._moveModalToBody();
   }
 
   ngOnDestroy(): void {

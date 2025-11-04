@@ -7,9 +7,16 @@
 
   @if(isLoadingTasks()) {
   <div class="loading">loading...</div>
-  } @else if(!tasks()?.length) {
+  } @else if(!displayedTasks()?.length) {
   <p class="empty">No tasks</p>
   } @else {
-  <app-tasks-list [tasks]="tasks()" />
+  <app-tasks-list [tasks]="displayedTasks()" />
   }
+
+  <app-pagination
+    [totalItems]="totalItems"
+    [itemsPerPage]="tasksPerPage"
+    [currentPage]="currentPage()"
+    (loadMore)="onLoadMore()"
+  />
 </section>

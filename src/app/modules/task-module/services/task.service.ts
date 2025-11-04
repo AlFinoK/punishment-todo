@@ -10,7 +10,6 @@ import {
   EditTaskInterface,
 } from '../interfaces';
 import { TaskStatusEnum } from '../enums';
-import { TaskHelperService } from './task-helper.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,10 +17,7 @@ import { TaskHelperService } from './task-helper.service';
 export class TaskService {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
 
-  constructor(
-    private _http: HttpClient,
-    private _taskHelperService: TaskHelperService
-  ) {}
+  constructor(private _http: HttpClient) {}
 
   public getAllTasks(): Observable<TaskInterface[]> {
     return this._http.get<TaskInterface[]>(`${environment.api_url}/tasks`);

@@ -9,23 +9,38 @@
   &:hover,
   &.active {
     color: $link-color;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: -22px;
+      top: 0;
+      background-color: $purple;
+      width: 3px;
+      height: 100%;
+      border-radius: 2px;
+    }
   }
 
   .content {
     display: flex;
     align-items: center;
     gap: 10px;
-  }
 
-  &.sm {
-    font-size: 12px;
-  }
+    &.sm {
+      font-size: 12px;
+      padding: 6px;
+    }
 
-  &.md {
-    font-size: 14px;
-  }
+    &.md {
+      font-size: 14px;
+      padding: 9px;
+    }
 
-  &.lg {
-    font-size: 16px;
+    &.lg {
+      font-size: 16px;
+      padding: 12px;
+    }
   }
 }

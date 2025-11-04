@@ -1,36 +1,25 @@
 <section class="navbar">
   <app-button (click)="openDrawer()">New task</app-button>
 
-  <div class="btns">
-    <app-link routerLink="/tasks/my-tasks">
-      <lucide-icon class="icon" name="mail" />
-      <p>My tasks</p>
+  <div class="links">
+    @for(navbarLink of navbarLinks; track $index) {
+    <app-link [routerLink]="navbarLink.routerLink">
+      <lucide-icon class="icon" [name]="navbarLink.icon" />
+      <p>{{ navbarLink.name }}</p>
     </app-link>
-
-    <app-link routerLink="/tasks/important-tasks">
-      <lucide-icon class="icon" name="star" />
-      <p>Important tasks</p>
-    </app-link>
-    <app-link routerLink="/tasks/finished-tasks">
-      <lucide-icon class="icon" name="check" />
-      <p>Finished tasks</p>
-    </app-link>
-    <app-link routerLink="/tasks/deleted-tasks">
-      <lucide-icon class="icon" name="trash" />
-      <p>Deleted tasks</p>
-    </app-link>
+    }
   </div>
 
   <div class="tags">
     <h6 class="tags-title">Tags</h6>
     <div class="tags-btns">
       @for(tag of tags; track tag.value) {
-      <app-tag [tagValue]="tag.value" />
+      <app-tag [tag]="tag" (tagClick)="filterTasksByTag(tag)" />
       }
     </div>
   </div>
 </section>
 
 <app-drawer [isOpen]="isOpenDrawer()" (closeDrawer)="closeDrawer()">
-  <app-task-form [action]="'create'" (formSubmitted)="closeDrawer()" />
+  <app-task-form (formSubmitted)="closeDrawer()" />
 </app-drawer>

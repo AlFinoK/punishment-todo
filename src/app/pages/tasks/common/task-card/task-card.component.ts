@@ -15,11 +15,13 @@ import {
 import {
   ButtonComponent,
   BadgeComponent,
-  InputComponent,
+  DrawerComponent,
 } from '@shared/components';
 
 import { AlertService } from '@shared/components/alert/core';
 import { TaskFormComponent } from '../task-form/task-form.component';
+import { ModalComponent } from '@shared/components/modal';
+import { CheckboxComponent } from '@shared/components/checkbox';
 
 @Component({
   selector: 'app-task-card',
@@ -30,7 +32,9 @@ import { TaskFormComponent } from '../task-form/task-form.component';
     LucideAngularModule,
     BadgeComponent,
     TaskFormComponent,
-    InputComponent,
+    ModalComponent,
+    CheckboxComponent,
+    DrawerComponent,
   ],
 })
 export class TaskCardComponent {
@@ -41,17 +45,35 @@ export class TaskCardComponent {
   );
 
   public isOpenDrawer: WritableSignal<boolean> = signal<boolean>(false);
+  public isOpenModal: WritableSignal<boolean> = signal<boolean>(false);
 
   constructor(
     private _taskService: TaskService,
     private _alertService: AlertService
   ) {}
 
+  protected openModal(): void {
+    this.isOpenModal.set(true);
+  }
+
+  protected closeModal(): void {
+    this.isOpenModal.set(false);
+  }
+
+  protected openDrawer(): void {
+    this.isOpenDrawer.set(true);
+  }
+
+  protected closeDrawer(): void {
+    this.isOpenDrawer.set(false);
+  }
+
   protected onDeleteTask(id: string | undefined): void {
     if (!id) return;
 
     event?.stopPropagation();
     this._taskService.deleteTaskById(id).subscribe((): void => {
+      this.closeModal();
       this._alertService.open('The task successfully deleted', {
         variant: 'success',
       }),

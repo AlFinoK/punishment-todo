@@ -11,11 +11,10 @@
   <p class="empty">No tasks</p>
   } @else {
   <app-tasks-list [tasks]="displayedTasks()" />
-
   }
 
   <app-pagination
-    [totalItems]="deletedTasks()?.length"
+    [totalItems]="totalItems"
     [itemsPerPage]="tasksPerPage"
     [currentPage]="currentPage()"
     (loadMore)="onLoadMore()"

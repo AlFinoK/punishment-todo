@@ -33,7 +33,7 @@ export class FinishedTasksComponent {
     private _taskHelperService: TaskHelperService
   ) {}
 
-  private _getFinishedTasks(): void {
+  private _getAllTasks(): void {
     this.isLoadingTasks.set(true);
 
     this._taskService
@@ -63,6 +63,6 @@ export class FinishedTasksComponent {
   }
 
   ngOnInit(): void {
-    this._getFinishedTasks();
+    this._getAllTasks();
   }
 }

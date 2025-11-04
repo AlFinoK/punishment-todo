@@ -6,8 +6,7 @@
   gap: 30px;
 
   .date {
-    display: flex;
-    flex-direction: column;
+    @include flex-column();
     gap: 4px;
 
     &-label {

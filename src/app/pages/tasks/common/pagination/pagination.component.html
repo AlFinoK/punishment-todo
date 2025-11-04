@@ -1,7 +1,7 @@
 @if(hasMoreItems){
 <div class="load-more">
   <app-button (buttonClick)="onLoadMore()" [size]="'none'" [variant]="'clear'">
-    <p>Load more {{ totalItems() - currentPage() * itemsPerPage() }} tasks</p>
+    <p>Load more {{ qty }} tasks</p>
   </app-button>
 </div>
 }

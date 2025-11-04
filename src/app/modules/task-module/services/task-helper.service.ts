@@ -1,38 +1,37 @@
+import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-import { TaskInterface } from '../interfaces';
+import { tags } from '@shared/data';
 
-import { TaskStatusEnum } from '../enums';
+import { TaskTagsInterface } from '../interfaces';
+import { TaskStatusEnum, TaskTagValueEnum } from '../enums';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskHelperService {
+  protected readonly tags: TaskTagsInterface[] = tags;
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
+  protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
+    TaskTagValueEnum;
+
+  public activeTags$: BehaviorSubject<TaskTagsInterface[]> =
+    new BehaviorSubject<TaskTagsInterface[]>([]);
 
   constructor() {}
 
-  public filterTasks(
-    tasks: TaskInterface[],
-    status: TaskStatusEnum,
-    isImportant?: boolean,
-    excludeStatuses: TaskStatusEnum[] = []
-  ): TaskInterface[] {
-    const filteredTasks: TaskInterface[] = tasks.filter(
-      (task: TaskInterface): boolean => !excludeStatuses.includes(task.status)
+  public filterTasksByTag(tag: TaskTagsInterface): void {
+    const activeTags: TaskTagsInterface[] = this.activeTags$.getValue();
+    const index: number = activeTags.findIndex(
+      (activeTag) => activeTag.value === tag.value
     );
 
-    if (isImportant) {
-      filteredTasks.filter((task: TaskInterface): boolean => task.isImportant);
+    if (index === -1) {
+      activeTags.push(tag);
+    } else {
+      activeTags.splice(index, 1);
     }
 
-    switch (status) {
-      case this.taskStatusEnum.DELETED:
-        return filteredTasks;
-      case this.taskStatusEnum.FINISHED:
-        return filteredTasks;
-      default:
-        return filteredTasks;
-    }
+    this.activeTags$.next([...activeTags]);
   }
 }

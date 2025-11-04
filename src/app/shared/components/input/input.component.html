@@ -6,10 +6,9 @@
   </div>
   <div class="input-container-inner">
     <input
-      [class]="['input', variant()]"
-      [type]="variant() === 'checkbox' ? 'checkbox' : 'text'"
+      [class]="['input', inputRole()]"
+      [type]="inputRole()"
       [value]="value()"
-      [checked]="value()"
       [placeholder]="placeholder()"
       (change)="onInputChange($event)"
       (blur)="onBlur()"
