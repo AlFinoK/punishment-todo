@@ -29,11 +29,8 @@ export class TaskHelperService {
       (activeTag: TaskTagsInterface): boolean => activeTag.value === tag.value
     );
 
-    if (index === -1) {
-      activeTags.push(tag);
-    } else {
-      activeTags.splice(index, 1);
-    }
+    if (index === -1) activeTags.push(tag);
+    else activeTags.splice(index, 1);
 
     this.activeTags$.next([...activeTags]);
   }

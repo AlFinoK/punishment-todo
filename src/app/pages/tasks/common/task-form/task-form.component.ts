@@ -97,7 +97,7 @@ export class TaskFormComponent implements OnInit {
       name: [null, Validators.required],
       description: [null],
       isImportant: [false],
-      endTime: [null, Validators.required],
+      endTime: [null],
       endDate: [this.currentDate, Validators.required],
       status: [this.taskStatusEnum.IN_PROGRESS],
       tags: this._formBuilder.array(

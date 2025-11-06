@@ -40,6 +40,22 @@
     }
   }
 
+  .time-select {
+    &-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid $primary-border;
+      border-radius: 6px;
+      padding: 8px 14px;
+    }
+
+    .icon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
   .btns {
     display: flex;
     gap: 10px;
