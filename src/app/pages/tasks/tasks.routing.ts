@@ -13,9 +13,9 @@ export const TasksRouting: Routes = [
           import('./my-tasks').then((m) => m.MyTasksComponent),
       },
       {
-        path: 'finished-tasks',
+        path: 'completed-tasks',
         loadComponent: () =>
-          import('./finished-tasks').then((m) => m.FinishedTasksComponent),
+          import('./completed-tasks').then((m) => m.CompletedTasksComponent),
       },
       {
         path: 'important-tasks',

@@ -38,6 +38,14 @@
       align-items: center;
       gap: 10px;
     }
+
+    .time {
+      .date {
+        font-size: 12px;
+        line-height: 18px;
+        color: $placeholder-color;
+      }
+    }
   }
 }
 

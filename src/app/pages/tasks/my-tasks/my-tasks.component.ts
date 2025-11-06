@@ -8,29 +8,23 @@ import {
   TaskStatusEnum,
   TaskTagsInterface,
 } from '@modules/task-module';
-import { AlertService } from '@shared/components/alert/core';
+import { AlertService } from '@shared/components';
 
-import {
-  TasksListComponent,
-  SearchFilterComponent,
-  PaginationComponent,
-} from '../common';
+import { TasksListComponent, SearchFilterComponent } from '../common';
 
 @Component({
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrl: './my-tasks.component.scss',
-  imports: [TasksListComponent, SearchFilterComponent, PaginationComponent],
+  imports: [TasksListComponent, SearchFilterComponent],
 })
 export class MyTasksComponent {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
 
-  protected tasks: WritableSignal<TaskInterface[] | null> = signal<
-    TaskInterface[] | null
-  >(null);
-  protected displayedTasks: WritableSignal<TaskInterface[] | null> = signal<
-    TaskInterface[] | null
-  >(null);
+  protected tasks: WritableSignal<TaskInterface[]> = signal<TaskInterface[]>(
+    []
+  );
+
   protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
   protected currentPage: WritableSignal<number> = signal<number>(1);
   protected tasksPerPage: number = 8;
@@ -51,22 +45,11 @@ export class MyTasksComponent {
     this.isLoadingTasks.set(true);
 
     this._taskService
-      .getAllTasks()
+      .getAllTasks(this.taskStatusEnum.IN_PROGRESS, false)
       .pipe(takeUntil(this._destroy$))
       .subscribe(
         (tasks: TaskInterface[]): void => {
-          const tags: TaskTagsInterface[] =
-            this._taskHelperService.activeTags$.getValue();
-
-          console.log(tags);
-
-          const filteredTasks: TaskInterface[] = tasks.filter(
-            (task: TaskInterface): boolean =>
-              task.status !== this.taskStatusEnum.FINISHED &&
-              task.status !== this.taskStatusEnum.DELETED
-          );
-
-          this.displayedTasks.set(filteredTasks.slice(0, this.tasksPerPage));
+          this.tasks.set(tasks);
           this.isLoadingTasks.set(false);
 
           this._alertService
@@ -83,24 +66,61 @@ export class MyTasksComponent {
       );
   }
 
-  protected onLoadMore(): void {
-    const displayedTasks: TaskInterface[] | null = this.displayedTasks();
-    const tasks: TaskInterface[] | null = this.tasks();
+  private _listenTasksStatuses(): void {
+    this._taskHelperService.createdTask$
+      .pipe(takeUntil(this._destroy$))
+      .subscribe((task: TaskInterface): void => {
+        this.tasks.update((tasks: TaskInterface[] | null): TaskInterface[] => [
+          task,
+          ...(tasks || []),
+        ]);
+      });
 
-    if (tasks && displayedTasks) {
-      const nextPage: number = this.currentPage() + 1;
-      const newTasks: TaskInterface[] = tasks.slice(
-        nextPage * this.tasksPerPage,
-        (nextPage + 1) * this.tasksPerPage
-      );
+    this._taskHelperService.updatedTask$
+      .pipe(takeUntil(this._destroy$))
+      .subscribe((task: TaskInterface): void => {
+        this.tasks.update((tasks: TaskInterface[] | null): TaskInterface[] => {
+          return (
+            tasks?.map(
+              (sourceTask: TaskInterface): TaskInterface =>
+                sourceTask._id === task._id ? task : sourceTask
+            ) || []
+          );
+        });
+      });
 
-      this.displayedTasks.set([...displayedTasks, ...newTasks]);
-      this.currentPage.set(nextPage);
-    }
+    this._taskHelperService.deletedTask$
+      .pipe(takeUntil(this._destroy$))
+      .subscribe((task: TaskInterface): void => {
+        this.tasks.update((tasks: TaskInterface[] | null): TaskInterface[] => {
+          return (
+            tasks?.filter((sourceTask: TaskInterface) => {
+              return sourceTask._id !== task._id;
+            }) || []
+          );
+        });
+      });
   }
+
+  // protected onLoadMore(): void {
+  //   const displayedTasks: TaskInterface[] | null = this.displayedTasks();
+  //   const tasks: TaskInterface[] | null = this.tasks();
+
+  //   if (tasks && displayedTasks) {
+  //     const nextPage: number = this.currentPage() + 1;
+  //     const newTasks: TaskInterface[] = tasks.slice(
+  //       nextPage * this.tasksPerPage,
+  //       (nextPage + 1) * this.tasksPerPage
+  //     );
+
+  //     this.displayedTasks.set([...displayedTasks, ...newTasks]);
+  //     this.currentPage.set(nextPage);
+  //   }
+  // }
 
   ngOnInit(): void {
     this._getAllTasks();
+    this._listenTasksStatuses();
   }
 
   ngOnDestroy(): void {

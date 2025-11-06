@@ -1,14 +1,14 @@
-<section class="finished-tasks">
+<section class="completed-tasks">
   <app-search-filter />
   <div class="page-title">
-    <h1 class="text">Finished tasks</h1>
+    <h1 class="text">Completed tasks</h1>
   </div>
 
   @if(isLoadingTasks()) {
   <div class="loading">loading...</div>
-  } @else if(!finishedTasks()?.length) {
+  } @else if(!completedTasks().length) {
   <p class="empty">No tasks</p>
   } @else {
-  <app-tasks-list [tasks]="finishedTasks()" />
+  <app-tasks-list [tasks]="completedTasks()" />
   }
 </section>

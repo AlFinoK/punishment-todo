@@ -6,6 +6,8 @@ import {
   OutputEmitterRef,
   WritableSignal,
   OnInit,
+  InputSignal,
+  input,
 } from '@angular/core';
 import {
   FormArray,
@@ -25,16 +27,19 @@ import {
   ButtonComponent,
   InputComponent,
   TextareaComponent,
+  CheckboxComponent,
+  AlertService,
 } from '@shared/components';
 import {
   CreateTaskInterface,
+  TaskHelperService,
+  TaskInterface,
   TaskService,
+  TaskStatusEnum,
   TaskTagsInterface,
   TaskTagValueEnum,
 } from '@modules/task-module';
 import { tags } from '@shared/data';
-import { AlertService } from '@shared/components/alert/core';
-import { CheckboxComponent } from '@shared/components/checkbox';
 
 @Component({
   selector: 'app-task-form',
@@ -55,8 +60,12 @@ import { CheckboxComponent } from '@shared/components/checkbox';
 export class TaskFormComponent implements OnInit {
   protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
     TaskTagValueEnum;
+  protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
   protected readonly tags: TaskTagsInterface[] = tags;
 
+  public task: InputSignal<TaskInterface | null> = input<TaskInterface | null>(
+    null
+  );
   public formSubmitted: OutputEmitterRef<void> = output<void>();
 
   private _destroy$: Subject<void> = new Subject<void>();
@@ -72,10 +81,6 @@ export class TaskFormComponent implements OnInit {
     showNearMonthDays: false,
   };
 
-  protected get getButtonTextByAction() {
-    return this.isLoadingSubmit() ? 'Saving...' : 'save';
-  }
-
   get formTags(): FormArray {
     return this.form?.get('tags') as FormArray;
   }
@@ -83,7 +88,8 @@ export class TaskFormComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _taskService: TaskService,
-    private _alertService: AlertService
+    private _alertService: AlertService,
+    private _taskHelperService: TaskHelperService
   ) {}
 
   private _initForm(): void {
@@ -93,6 +99,7 @@ export class TaskFormComponent implements OnInit {
       isImportant: [false],
       endTime: [null, Validators.required],
       endDate: [this.currentDate, Validators.required],
+      status: [this.taskStatusEnum.IN_PROGRESS],
       tags: this._formBuilder.array(
         this.tags.map((): boolean => false),
         Validators.required
@@ -100,9 +107,20 @@ export class TaskFormComponent implements OnInit {
     });
   }
 
-  protected onSubmit(taskId?: string): void {
-    if (taskId) this.onSubmitEditTask(taskId);
-    else this.onSubmitCreateTask();
+  private _fillForm(task: CreateTaskInterface): void {
+    this.form?.patchValue({
+      name: task.name,
+      description: task.description,
+      isImportant: task.isImportant,
+      endTime: task.endTime,
+      endDate: task.endDate,
+      tags: task.tags,
+    });
+  }
+
+  protected onSubmit(): void {
+    if (!this.task()?._id) this.onSubmitCreateTask();
+    this.onSubmitEditTask();
   }
 
   protected onSubmitCreateTask(): void {
@@ -110,8 +128,9 @@ export class TaskFormComponent implements OnInit {
 
     const formValue: CreateTaskInterface = this.form.value;
 
-    const selectedTags: string[] = this.formTags.controls
-      .map((control, idx: number): string | null =>
+    // @ts-ignore
+    const selectedTags: TaskTagValueEnum[] = this.formTags.controls
+      .map((control, idx: number): TaskTagValueEnum | null =>
         control.value ? this.tags[idx].value : null
       )
       .filter((tag: string | null) => tag != null);
@@ -124,8 +143,10 @@ export class TaskFormComponent implements OnInit {
       .createTask(formValue)
       .pipe(takeUntil(this._destroy$))
       .subscribe(
-        (): void => {
+        (task: TaskInterface): void => {
           this.isLoadingSubmit.set(false);
+          this._taskHelperService.createdTask$.next(task);
+
           this._alertService
             .open('The task was successfully added!', { variant: 'success' })
             .subscribe();
@@ -140,17 +161,19 @@ export class TaskFormComponent implements OnInit {
       );
   }
 
-  protected onSubmitEditTask(taskId: string): void {
+  protected onSubmitEditTask(): void {
     const formValue: CreateTaskInterface = this.form?.value;
+    this._fillForm(this.form?.value);
 
     this.isLoadingSubmit.set(true);
 
     this._taskService
-      .editTask(formValue, taskId)
+      .editTask(formValue, this.task()?._id ?? '')
       .pipe(takeUntil(this._destroy$))
       .subscribe(
-        (): void => {
+        (task: TaskInterface): void => {
           this.isLoadingSubmit.set(false);
+          this._taskHelperService.updatedTask$.next(task);
           this._alertService
             .open('The task was successfully edited!', { variant: 'success' })
             .subscribe();

@@ -6,7 +6,7 @@
 
   @if(isLoadingTasks()) {
   <div class="loading">loading...</div>
-  } @else if(!importantTasks()?.length) {
+  } @else if(!importantTasks().length) {
   <p class="empty">No tasks</p>
   } @else {
   <app-tasks-list [tasks]="importantTasks()" />

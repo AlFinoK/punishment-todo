@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 
 import {
+  TaskHelperService,
   TaskInterface,
   TaskService,
   TaskStatusEnum,
@@ -16,12 +17,13 @@ import {
   ButtonComponent,
   BadgeComponent,
   DrawerComponent,
+  AlertService,
+  CheckboxComponent,
+  ModalComponent,
 } from '@shared/components';
 
-import { AlertService } from '@shared/components/alert/core';
-import { TaskFormComponent } from '../task-form/task-form.component';
-import { ModalComponent } from '@shared/components/modal';
-import { CheckboxComponent } from '@shared/components/checkbox';
+import { TaskFormComponent } from '../task-form';
+import { DndHandleDirective } from 'ngx-drag-drop';
 
 @Component({
   selector: 'app-task-card',
@@ -35,6 +37,7 @@ import { CheckboxComponent } from '@shared/components/checkbox';
     ModalComponent,
     CheckboxComponent,
     DrawerComponent,
+    DndHandleDirective,
   ],
 })
 export class TaskCardComponent {
@@ -49,8 +52,11 @@ export class TaskCardComponent {
 
   constructor(
     private _taskService: TaskService,
-    private _alertService: AlertService
+    private _alertService: AlertService,
+    private _taskHelperService: TaskHelperService
   ) {}
+
+  protected onCheckbox(): void {}
 
   protected openModal(): void {
     this.isOpenModal.set(true);
@@ -68,12 +74,13 @@ export class TaskCardComponent {
     this.isOpenDrawer.set(false);
   }
 
-  protected onDeleteTask(id: string | undefined): void {
-    if (!id) return;
+  protected onDeleteTask(): void {
+    const task: TaskInterface | null = this.task();
+    if (!task) return;
 
-    event?.stopPropagation();
-    this._taskService.deleteTaskById(id).subscribe((): void => {
+    this._taskService.deleteTaskById(task._id).subscribe((): void => {
       this.closeModal();
+      this._taskHelperService.deletedTask$.next(task);
       this._alertService.open('The task successfully deleted', {
         variant: 'success',
       }),

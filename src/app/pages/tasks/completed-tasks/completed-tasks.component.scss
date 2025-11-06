@@ -1,7 +1,7 @@
 @use "vars" as *;
 @use "mixins" as *;
 
-.finished-tasks {
+.completed-tasks {
   background-color: $dashboard-bg;
 
   .loading,

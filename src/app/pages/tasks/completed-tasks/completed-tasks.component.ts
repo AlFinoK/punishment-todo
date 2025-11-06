@@ -1,26 +1,26 @@
 import { Subject, takeUntil } from 'rxjs';
 import { Component, signal, WritableSignal } from '@angular/core';
 
-import { AlertService } from '@shared/components';
 import {
   TaskHelperService,
   TaskInterface,
   TaskService,
   TaskStatusEnum,
 } from '@modules/task-module';
+import { AlertService } from '@shared/components';
 
 import { SearchFilterComponent, TasksListComponent } from '../common';
 
 @Component({
-  selector: 'app-important-tasks',
-  templateUrl: './important-tasks.component.html',
-  styleUrl: './important-tasks.component.scss',
+  selector: 'app-completed-tasks',
+  templateUrl: './completed-tasks.component.html',
+  styleUrl: './completed-tasks.component.scss',
   imports: [SearchFilterComponent, TasksListComponent],
 })
-export class ImportantTasksComponent {
+export class CompletedTasksComponent {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
 
-  protected importantTasks: WritableSignal<TaskInterface[]> = signal<
+  protected completedTasks: WritableSignal<TaskInterface[]> = signal<
     TaskInterface[]
   >([]);
   protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
@@ -37,23 +37,23 @@ export class ImportantTasksComponent {
     this._taskHelperService.createdTask$
       .pipe(takeUntil(this._destroy$))
       .subscribe((task: TaskInterface): void => {
-        this.importantTasks.update(
+        this.completedTasks.update(
           (tasks: TaskInterface[] | null): TaskInterface[] => [
             task,
             ...(tasks || []),
           ]
         );
-        const filteredTasks: TaskInterface[] = this.importantTasks().filter(
+        const filteredTasks: TaskInterface[] = this.completedTasks().filter(
           (task: TaskInterface): boolean => task.isImportant
         );
 
-        this.importantTasks.set(filteredTasks);
+        this.completedTasks.set(filteredTasks);
       });
 
     this._taskHelperService.updatedTask$
       .pipe(takeUntil(this._destroy$))
       .subscribe((task: TaskInterface): void => {
-        this.importantTasks.update(
+        this.completedTasks.update(
           (tasks: TaskInterface[] | null): TaskInterface[] => {
             return (
               tasks?.map((sourceTask: TaskInterface) =>
@@ -67,7 +67,7 @@ export class ImportantTasksComponent {
     this._taskHelperService.deletedTask$
       .pipe(takeUntil(this._destroy$))
       .subscribe((task: TaskInterface): void => {
-        this.importantTasks.update(
+        this.completedTasks.update(
           (tasks: TaskInterface[] | null): TaskInterface[] => {
             return (
               tasks?.filter((sourceTask: TaskInterface) => {
@@ -83,16 +83,15 @@ export class ImportantTasksComponent {
     this.isLoadingTasks.set(true);
 
     this._taskService
-      .getAllTasks(this.taskStatusEnum.IN_PROGRESS, true)
+      .getAllTasks(this.taskStatusEnum.COMPLETED, false)
       .pipe(takeUntil(this._destroy$))
       .subscribe(
         (tasks: TaskInterface[]): void => {
-          this.importantTasks.set(tasks);
+          this.completedTasks.set(tasks);
           this.isLoadingTasks.set(false);
+
           this._alertService
-            .open('Tasks successfully loaded', {
-              variant: 'success',
-            })
+            .open('Tasks successfully loaded', { variant: 'success' })
             .subscribe();
         },
 

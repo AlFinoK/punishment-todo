@@ -57,7 +57,7 @@
 
   <div class="btns">
     <app-button buttonRole="submit" [disabled]="isLoadingSubmit()">
-      {{ getButtonTextByAction }}
+      {{ task()?._id ? "Save changes" : "Create task" }}
     </app-button>
   </div>
 </form>

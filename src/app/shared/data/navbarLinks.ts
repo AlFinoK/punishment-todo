@@ -7,17 +7,17 @@ export const navbarLinks: NavbarLinksInterface[] = [
     icon: 'mail',
   },
   {
-    name: 'Important tasks',
+    name: 'Important',
     routerLink: '/tasks/important-tasks',
     icon: 'star',
   },
   {
-    name: 'Finished tasks',
-    routerLink: '/tasks/finished-tasks',
+    name: 'Completed',
+    routerLink: '/tasks/completed-tasks',
     icon: 'check',
   },
   {
-    name: 'Deleted tasks',
+    name: 'Deleted',
     routerLink: '/tasks/deleted-tasks',
     icon: 'trash',
   },

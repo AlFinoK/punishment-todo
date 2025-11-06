@@ -27,11 +27,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class TextareaComponent implements ControlValueAccessor {
   public label: InputSignal<string> = input<string>('');
   public placeholder: InputSignal<string> = input<string>('');
-
+  public maxLength: InputSignal<number> = input<number>(200);
   protected value: WritableSignal<string> = signal('');
 
-  private onChange: (value: string) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange: (value: string) => void = (): void => {};
+  private onTouched: () => void = (): void => {};
 
   public writeValue(value: string): void {
     this.value.set(value ?? '');

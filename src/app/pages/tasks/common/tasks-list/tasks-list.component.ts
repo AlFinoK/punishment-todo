@@ -1,14 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   InputSignal,
+  linkedSignal,
+  Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
 import { DndModule, DndDropEvent } from 'ngx-drag-drop';
 
-import { TaskInterface } from '@modules/task-module';
+import { TaskInterface, TaskStatusEnum } from '@modules/task-module';
 
 import { TaskCardComponent } from '../task-card';
 
@@ -20,24 +23,20 @@ import { TaskCardComponent } from '../task-card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TasksListComponent {
-  public tasks: InputSignal<TaskInterface[] | null> = input<
-    TaskInterface[] | null
-  >(null);
-  protected localTasks: WritableSignal<TaskInterface[]> = signal<
-    TaskInterface[]
-  >([]);
+  protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
+  public tasks: InputSignal<TaskInterface[]> = input<TaskInterface[]>([]);
+
+  protected localTasks: WritableSignal<TaskInterface[]> = linkedSignal(
+    (): TaskInterface[] => {
+      return this.tasks();
+    }
+  );
 
   constructor() {}
-
-  private _initTasks(): void {
-    const tasks: TaskInterface[] | null = this.tasks();
-    if (tasks) this.localTasks.set([...tasks]);
-  }
 
   protected onTaskDrop(event: DndDropEvent, targetTask: TaskInterface): void {
     const tasks: TaskInterface[] = [...this.localTasks()];
     const draggedTask: TaskInterface = event.data;
-
     if (!draggedTask) return;
 
     const fromIndex: number = tasks.findIndex(
@@ -56,9 +55,5 @@ export class TasksListComponent {
     }
 
     this.localTasks.set(tasks);
-  }
-
-  ngOnInit(): void {
-    this._initTasks();
   }
 }

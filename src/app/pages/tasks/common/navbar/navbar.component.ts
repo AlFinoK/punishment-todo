@@ -32,10 +32,10 @@ import { NavbarLinksInterface } from '@shared/interfaces';
   ],
 })
 export class NavbarComponent {
-  protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
-    TaskTagValueEnum;
   protected readonly tags: TaskTagsInterface[] = tags;
   protected readonly navbarLinks: NavbarLinksInterface[] = navbarLinks;
+  protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
+    TaskTagValueEnum;
 
   public isOpenDrawer: WritableSignal<boolean> = signal<boolean>(false);
 

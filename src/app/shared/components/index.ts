@@ -6,3 +6,5 @@ export * from './drawer';
 export * from './alert';
 export * from './input';
 export * from './textarea';
+export * from './checkbox';
+export * from './modal';

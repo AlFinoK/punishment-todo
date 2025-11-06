@@ -1,10 +1,12 @@
 <div class="task-card" (click)="openDrawer()">
-  <div class="left">
-    <app-checkbox />
+  <div (click)="$event.stopPropagation()" class="left">
+    @if(task()?.status !== taskStatusEnum.DELETED) {
+    <app-checkbox (click)="onCheckbox()" />
+    }
     <p class="title">{{ task()?.name }}</p>
   </div>
 
-  <div class="right">
+  <div (click)="$event.stopPropagation()" class="right">
     <div class="badges">
       @for (tag of task()?.tags; track tag) {
       <app-badge [badgeValue]="tag" [id]="$index" />
@@ -15,18 +17,24 @@
       <p class="date">{{ task()?.endDate }}</p>
     </div>
 
+    @if(task()?.status !== taskStatusEnum.DELETED) {
     <app-button (buttonClick)="openModal()" [size]="'none'" [variant]="'clear'">
       <lucide-icon class="icon" name="trash" />
     </app-button>
 
-    <app-button [size]="'none'" [variant]="'clear'">
+    <app-button [size]="'none'" [variant]="'clear'" dndHandle>
       <lucide-icon class="icon" name="grip-vertical" />
     </app-button>
+    } @else {
+    <app-button [size]="'none'" [variant]="'clear'">
+      <lucide-icon class="icon" name="rotate-ccw" />
+    </app-button>
+    }
   </div>
 </div>
 
 <ng-template>
-  <app-task-form />
+  <app-task-form [task]="task()" />
 </ng-template>
 
 <app-drawer [isOpen]="isOpenDrawer()" (closeDrawer)="closeDrawer()">
@@ -40,12 +48,10 @@
     <h3 class="modal-title">Are you sure?</h3>
     <p class="modal-descr">You won't to recover this task</p>
     <div class="modal-btns">
-      <app-button (buttonClick)="onDeleteTask(task()?._id)">
-        Yes, delete
-      </app-button>
-      <app-button (buttonClick)="closeModal()" [variant]="'outline'">
-        Cancel
-      </app-button>
+      <app-button (buttonClick)="onDeleteTask()">Yes, delete</app-button>
+      <app-button (buttonClick)="closeModal()" [variant]="'outline'"
+        >Cancel</app-button
+      >
     </div>
   </div>
 </app-modal>

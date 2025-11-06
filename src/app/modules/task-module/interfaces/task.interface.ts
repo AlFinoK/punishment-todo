@@ -1,5 +1,4 @@
-import { TaskStatusEnum } from '../enums';
-import { TaskTagsInterface } from './task-tags.interface';
+import { TaskStatusEnum, TaskTagValueEnum } from '../enums';
 
 export interface TaskInterface {
   _id: string;
@@ -9,5 +8,5 @@ export interface TaskInterface {
   isImportant: boolean;
   endTime: string;
   endDate: string;
-  tags: string[];
+  tags: TaskTagValueEnum[];
 }

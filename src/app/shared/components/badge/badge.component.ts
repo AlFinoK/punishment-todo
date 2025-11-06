@@ -18,9 +18,8 @@ import { TaskTagValueEnum } from '@modules/task-module';
 export class BadgeComponent {
   protected readonly taskTagValueEnum: typeof TaskTagValueEnum =
     TaskTagValueEnum;
-  public badgeValue: InputSignal<string> = input<string>(
-    this.taskTagValueEnum.PRODUCTIVITY
-  );
+  public badgeValue: InputSignal<TaskTagValueEnum | null> =
+    input<TaskTagValueEnum | null>(null);
 
   constructor() {}
 }
