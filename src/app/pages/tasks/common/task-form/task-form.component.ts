@@ -107,14 +107,24 @@ export class TaskFormComponent implements OnInit {
     });
   }
 
-  private _fillForm(task: CreateTaskInterface): void {
-    this.form?.patchValue({
+  private _fillForm(task: TaskInterface): void {
+    if (!this.form) return;
+
+    this.form.patchValue({
       name: task.name,
       description: task.description,
       isImportant: task.isImportant,
       endTime: task.endTime,
+      status: task.status,
       endDate: task.endDate,
-      tags: task.tags,
+    });
+
+    const tagBooleans = this.tags.map(
+      (tag) => task.tags?.includes(tag.value) ?? false
+    );
+
+    this.formTags.controls.forEach((control, idx) => {
+      control.setValue(tagBooleans[idx]);
     });
   }
 
@@ -139,12 +149,11 @@ export class TaskFormComponent implements OnInit {
 
     const formValue: CreateTaskInterface = this.form.value;
 
-    // @ts-ignore
-    const selectedTags: TaskTagValueEnum[] = this.formTags.controls
-      .map((control, idx: number): TaskTagValueEnum | null =>
+    const selectedTags: any[] = this.formTags.controls
+      .map((control, idx: number): string | null =>
         control.value ? this.tags[idx].value : null
       )
-      .filter((tag: string | null) => tag != null);
+      .filter((tag: string | null): tag is string => tag !== null);
 
     formValue.tags = selectedTags;
 
@@ -157,11 +166,9 @@ export class TaskFormComponent implements OnInit {
         (task: TaskInterface): void => {
           this.isLoadingSubmit.set(false);
           this._taskHelperService.createdTask$.next(task);
-
           this._alertService
             .open('The task was successfully added!', { variant: 'success' })
             .subscribe();
-
           this.formSubmitted.emit();
         },
         (error: HttpErrorResponse): void => {
@@ -173,8 +180,17 @@ export class TaskFormComponent implements OnInit {
   }
 
   protected onSubmitEditTask(): void {
-    const formValue: CreateTaskInterface = this.form?.value;
-    this._fillForm(this.form?.value);
+    if (!this.form) return;
+
+    const formValue: CreateTaskInterface = this.form.value;
+
+    const selectedTags: any[] = this.formTags.controls
+      .map((control, idx: number): string | null =>
+        control.value ? this.tags[idx].value : null
+      )
+      .filter((tag: string | null): tag is string => tag !== null);
+
+    formValue.tags = selectedTags;
 
     this.isLoadingSubmit.set(true);
 
@@ -188,7 +204,6 @@ export class TaskFormComponent implements OnInit {
           this._alertService
             .open('The task was successfully edited!', { variant: 'success' })
             .subscribe();
-
           this.formSubmitted.emit();
         },
         (error: HttpErrorResponse): void => {

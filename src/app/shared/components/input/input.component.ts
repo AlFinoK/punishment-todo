@@ -10,6 +10,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { InputRoleType, InputLabelPositionType } from './core';
+import { InputSizeType } from './core/types/input-size.type';
 
 @Component({
   selector: 'app-input',
@@ -30,6 +31,7 @@ export class InputComponent implements ControlValueAccessor {
   public label: InputSignal<string> = input<string>('');
   public placeholder: InputSignal<string> = input<string>('');
   public inputRole: InputSignal<InputRoleType> = input<InputRoleType>('text');
+  public size: InputSignal<InputSizeType> = input<InputSizeType>('md');
 
   protected value: WritableSignal<string> = signal('');
 

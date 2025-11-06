@@ -8,7 +8,6 @@ import {
   forwardRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
 import { CheckboxLabelPositionType } from './core';
 
 @Component({
@@ -19,9 +18,7 @@ import { CheckboxLabelPositionType } from './core';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(
-        (): typeof CheckboxComponent => CheckboxComponent
-      ),
+      useExisting: forwardRef(() => CheckboxComponent),
       multi: true,
     },
   ],
@@ -31,16 +28,16 @@ export class CheckboxComponent implements ControlValueAccessor {
     input<CheckboxLabelPositionType>('left');
   public label: InputSignal<string> = input<string>('');
 
-  protected value: WritableSignal<string> = signal('');
+  protected value: WritableSignal<boolean> = signal(false);
 
-  private onChange: (value: string) => void = () => {};
+  private onChange: (value: boolean) => void = () => {};
   private onTouched: () => void = () => {};
 
-  public writeValue(value: string): void {
-    this.value.set(value ?? '');
+  public writeValue(value: boolean): void {
+    this.value.set(!!value);
   }
 
-  public registerOnChange(fn: (value: string) => void): void {
+  public registerOnChange(fn: (value: boolean) => void): void {
     this.onChange = fn;
   }
 
@@ -50,7 +47,7 @@ export class CheckboxComponent implements ControlValueAccessor {
 
   protected onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement;
-    this.value.set(target.checked ? 'true' : '');
+    this.value.set(target.checked);
     this.onChange(this.value());
   }
 

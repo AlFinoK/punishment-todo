@@ -16,7 +16,7 @@ import { ButtonComponent } from '@shared/components';
 })
 export class PaginationComponent {
   public totalItems: InputSignal<number> = input<number>(0);
-  public itemsPerPage: InputSignal<number> = input<number>(5);
+  public itemsPerPage: InputSignal<number> = input<number>(8);
   public currentPage: InputSignal<number> = input<number>(1);
 
   public loadMore: OutputEmitterRef<void> = output<void>();

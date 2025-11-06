@@ -13,7 +13,6 @@ import {
   TaskInterface,
   TaskService,
   TaskStatusEnum,
-  TaskTagsInterface,
 } from '@modules/task-module';
 import { AlertService } from '@shared/components';
 
@@ -32,17 +31,16 @@ import {
 })
 export class MyTasksComponent implements OnInit, OnDestroy {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
+  protected readonly itemsPerPage: number = 8;
+
+  private readonly _destroy$: Subject<void> = new Subject<void>();
 
   protected allTasks: WritableSignal<TaskInterface[]> = signal([]);
   protected visibleTasks: WritableSignal<TaskInterface[]> = signal([]);
   protected isLoadingTasks: WritableSignal<boolean> = signal(false);
 
   protected currentPage: WritableSignal<number> = signal(1);
-  protected readonly itemsPerPage = 5;
-
   protected searchQuery: WritableSignal<string> = signal('');
-
-  private readonly _destroy$ = new Subject<void>();
 
   get totalItems(): number {
     return this.allTasks()?.length || 0;
@@ -55,23 +53,24 @@ export class MyTasksComponent implements OnInit, OnDestroy {
   ) {}
 
   private _updateVisibleTasks(filtered?: TaskInterface[]): void {
-    const tasksList = filtered ?? this.allTasks();
-    const end = this.currentPage() * this.itemsPerPage;
-    const sliced = tasksList.slice(0, end);
+    const tasksList: TaskInterface[] = filtered ?? this.allTasks();
+    const end: number = this.currentPage() * this.itemsPerPage;
+    const sliced: TaskInterface[] = tasksList.slice(0, end);
     this.visibleTasks.set(sliced);
   }
 
   private _filterTasks(): void {
-    const query = this.searchQuery().trim().toLowerCase();
-    let filtered = this.allTasks();
+    const query: string = this.searchQuery().trim().toLowerCase();
+
     if (query) {
-      filtered = filtered.filter((task) =>
-        task.name.toLowerCase().includes(query)
+      this.allTasks.set(
+        this.allTasks().filter((task: TaskInterface): boolean =>
+          task.name.toLowerCase().includes(query)
+        )
       );
     }
-    // сбрасываем страницу, если нужно
-    this.currentPage.set(1);
-    this._updateVisibleTasks(filtered);
+
+    this._updateVisibleTasks(this.allTasks());
   }
 
   private _getAllTasks(): void {
@@ -80,38 +79,45 @@ export class MyTasksComponent implements OnInit, OnDestroy {
     this._taskService
       .getAllTasks(this.taskStatusEnum.IN_PROGRESS, false)
       .pipe(takeUntil(this._destroy$))
-      .subscribe({
-        next: (tasks: TaskInterface[]) => {
+      .subscribe(
+        (tasks: TaskInterface[]): void => {
           this.allTasks.set(tasks);
-          this._filterTasks(); // сразу применяем фильтрацию + пагинацию
+          this._filterTasks();
           this.isLoadingTasks.set(false);
 
           this._alertService
             .open('Tasks successfully loaded', { variant: 'success' })
             .subscribe();
         },
-        error: () => {
+        (): void => {
           this.isLoadingTasks.set(false);
           this._alertService
             .open('Failed to load tasks', { variant: 'error' })
             .subscribe();
-        },
-      });
+        }
+      );
   }
 
   private _listenTasksStatuses(): void {
     this._taskHelperService.createdTask$
       .pipe(takeUntil(this._destroy$))
-      .subscribe((task: TaskInterface) => {
-        this.allTasks.update((tasks) => [task, ...(tasks || [])]);
+      .subscribe((task: TaskInterface): void => {
+        this.allTasks.update((tasks: TaskInterface[]): TaskInterface[] => [
+          task,
+          ...(tasks || []),
+        ]);
         this._filterTasks();
       });
 
     this._taskHelperService.updatedTask$
       .pipe(takeUntil(this._destroy$))
-      .subscribe((task: TaskInterface) => {
+      .subscribe((task: TaskInterface): void => {
         this.allTasks.update(
-          (tasks) => tasks?.map((t) => (t._id === task._id ? task : t)) || []
+          (tasks: TaskInterface[]): TaskInterface[] =>
+            tasks?.map(
+              (sourceTask: TaskInterface): TaskInterface =>
+                sourceTask._id === task._id ? sourceTask : task
+            ) || []
         );
         this._filterTasks();
       });
@@ -120,16 +126,27 @@ export class MyTasksComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._destroy$))
       .subscribe((task: TaskInterface) => {
         this.allTasks.update(
-          (tasks) => tasks?.filter((t) => t._id !== task._id) || []
+          (tasks: TaskInterface[]): TaskInterface[] =>
+            tasks?.filter(
+              (sourceTask: TaskInterface): boolean =>
+                sourceTask._id !== task._id
+            ) || []
         );
         this._filterTasks();
       });
   }
 
   protected onLoadMore(): void {
-    this.currentPage.update((p) => p + 1);
-    this._filterTasks(); // или _updateVisibleTasks() с текущим фильтром
-    console.log('visibleTasks now:', this.visibleTasks());
+    this.currentPage.update((page: number): number => page + 1);
+    this._updateVisibleTasks(
+      this.searchQuery().trim()
+        ? this.allTasks().filter((task: TaskInterface): boolean =>
+            task.name
+              .toLowerCase()
+              .includes(this.searchQuery().trim().toLowerCase())
+          )
+        : this.allTasks()
+    );
   }
 
   protected onSearchChange(query: string): void {

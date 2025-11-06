@@ -10,7 +10,9 @@
   } @else if(!visibleTasks().length) {
   <p class="empty">No tasks</p>
   } @else {
-  <app-tasks-list [tasks]="visibleTasks()" />
+  <div class="tasks-list-container">
+    <app-tasks-list [tasks]="visibleTasks()" />
+  </div>
 
   <app-pagination
     [totalItems]="totalItems"

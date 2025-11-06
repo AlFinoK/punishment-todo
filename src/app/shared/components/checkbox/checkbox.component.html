@@ -7,9 +7,8 @@
     <input
       class="checkbox"
       type="checkbox"
-      [checked]="value() === 'true'"
+      [checked]="value()"
       (change)="onInputChange($event)"
-      (click)="onInputChange($event)"
       (blur)="onBlur()"
     />
   </div>

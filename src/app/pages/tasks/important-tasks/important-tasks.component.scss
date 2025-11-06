@@ -2,6 +2,9 @@
 @use "mixins" as *;
 
 .important-tasks {
+  height: 100%;
+  overflow-y: auto;
+
   .loading,
   .empty {
     @include flex-jc-ac();

@@ -80,6 +80,8 @@ export class TaskCardComponent {
 
     this._taskService.deleteTaskById(task._id).subscribe((): void => {
       this.closeModal();
+      task.status = TaskStatusEnum.DELETED;
+
       this._taskHelperService.deletedTask$.next(task);
       this._alertService.open('The task successfully deleted', {
         variant: 'success',

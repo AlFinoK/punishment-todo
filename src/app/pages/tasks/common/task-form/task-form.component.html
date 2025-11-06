@@ -7,6 +7,9 @@
       placeholder="Enter task name"
       formControlName="name"
     />
+    @if(form.get('name')?.touched && form.get('name')?.invalid){
+    <div class="error">Task name is required</div>
+    }
   </div>
 
   <div class="time-select">
@@ -37,6 +40,9 @@
 
       <lucide-icon class="icon" name="calendar" />
     </div>
+    @if(form.get('endDate')?.touched && form.get('name')?.invalid){
+    <div class="error">End date is required</div>
+    }
   </div>
 
   <div class="descr">
@@ -56,12 +62,17 @@
         [label]="tag.value | titlecase"
         [formControlName]="idx"
       />
+      } @if(form.get('tags')?.touched && form.get('name')?.invalid){
+      <div class="error">Tags is required</div>
       }
     </div>
   </div>
 
   <div class="btns">
-    <app-button buttonRole="submit" [disabled]="isLoadingSubmit()">
+    <app-button
+      buttonRole="submit"
+      [disabled]="isLoadingSubmit() || form.pristine || form.invalid"
+    >
       {{ task()?._id ? "Save changes" : "Create task" }}
     </app-button>
   </div>

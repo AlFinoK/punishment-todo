@@ -1,5 +1,6 @@
 <section class="important-tasks">
-  <app-search-filter />
+  <app-search-filter (searchChange)="onSearchChange($event)" />
+
   <div class="page-title">
     <h1 class="text">Important tasks</h1>
   </div>
@@ -9,6 +10,16 @@
   } @else if(!importantTasks().length) {
   <p class="empty">No tasks</p>
   } @else {
-  <app-tasks-list [tasks]="importantTasks()" />
+
+  <div class="tasks-list-container">
+    <app-tasks-list [tasks]="importantTasks()" />
+  </div>
+
+  <app-pagination
+    [totalItems]="totalItems"
+    [itemsPerPage]="itemsPerPage"
+    [currentPage]="currentPage()"
+    (loadMore)="onLoadMore()"
+  />
   }
 </section>

@@ -4,6 +4,7 @@ import {
   output,
   OutputEmitterRef,
   signal,
+  WritableSignal,
 } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { InputComponent, ButtonComponent } from '@shared/components';
@@ -16,14 +17,13 @@ import { InputComponent, ButtonComponent } from '@shared/components';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchFilterComponent {
-  public query = signal<string>('');
+  public query: WritableSignal<string> = signal<string>('');
   public searchChange: OutputEmitterRef<string> = output<string>();
 
   protected onQueryInput(event: Event): void {
     const inputEl = event.target as HTMLInputElement;
-    const value = inputEl.value;
-    this.query.set(value);
-    this.searchChange.emit(value);
+    this.query.set(inputEl.value);
+    this.searchChange.emit(inputEl.value);
   }
 
   protected onClear(): void {
