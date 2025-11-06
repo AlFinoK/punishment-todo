@@ -35,6 +35,16 @@ export class TaskHelperService {
     this.activeTags$.next([...activeTags]);
   }
 
+  public filterTasksByActiveTags(tasks: TaskInterface[]): TaskInterface[] {
+    const activeTags = this.activeTags$.getValue();
+    if (activeTags.length === 0) return tasks;
+
+    const activeTagValues = activeTags.map((t) => t.value);
+    return tasks.filter((task) =>
+      task.tags.some((tag) => activeTagValues.includes(tag))
+    );
+  }
+
   public filterTasksPerRender(
     status: TaskStatusEnum,
     tasks: TaskInterface[],

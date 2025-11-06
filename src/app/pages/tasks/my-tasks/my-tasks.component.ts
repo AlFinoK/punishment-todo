@@ -1,5 +1,12 @@
 import { Subject, takeUntil } from 'rxjs';
-import { Component, signal, WritableSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  WritableSignal,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 
 import {
   TaskHelperService,
@@ -10,29 +17,35 @@ import {
 } from '@modules/task-module';
 import { AlertService } from '@shared/components';
 
-import { TasksListComponent, SearchFilterComponent } from '../common';
+import {
+  TasksListComponent,
+  SearchFilterComponent,
+  PaginationComponent,
+} from '../common';
 
 @Component({
   selector: 'app-my-tasks',
   templateUrl: './my-tasks.component.html',
   styleUrl: './my-tasks.component.scss',
-  imports: [TasksListComponent, SearchFilterComponent],
+  imports: [TasksListComponent, SearchFilterComponent, PaginationComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MyTasksComponent {
+export class MyTasksComponent implements OnInit, OnDestroy {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
 
-  protected tasks: WritableSignal<TaskInterface[]> = signal<TaskInterface[]>(
-    []
-  );
+  protected allTasks: WritableSignal<TaskInterface[]> = signal([]);
+  protected visibleTasks: WritableSignal<TaskInterface[]> = signal([]);
+  protected isLoadingTasks: WritableSignal<boolean> = signal(false);
 
-  protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
-  protected currentPage: WritableSignal<number> = signal<number>(1);
-  protected tasksPerPage: number = 8;
+  protected currentPage: WritableSignal<number> = signal(1);
+  protected readonly itemsPerPage = 5;
 
-  private _destroy$: Subject<void> = new Subject<void>();
+  protected searchQuery: WritableSignal<string> = signal('');
+
+  private readonly _destroy$ = new Subject<void>();
 
   get totalItems(): number {
-    return this.tasks()?.length || 0;
+    return this.allTasks()?.length || 0;
   }
 
   constructor(
@@ -41,82 +54,88 @@ export class MyTasksComponent {
     private _taskHelperService: TaskHelperService
   ) {}
 
+  private _updateVisibleTasks(filtered?: TaskInterface[]): void {
+    const tasksList = filtered ?? this.allTasks();
+    const end = this.currentPage() * this.itemsPerPage;
+    const sliced = tasksList.slice(0, end);
+    this.visibleTasks.set(sliced);
+  }
+
+  private _filterTasks(): void {
+    const query = this.searchQuery().trim().toLowerCase();
+    let filtered = this.allTasks();
+    if (query) {
+      filtered = filtered.filter((task) =>
+        task.name.toLowerCase().includes(query)
+      );
+    }
+    // сбрасываем страницу, если нужно
+    this.currentPage.set(1);
+    this._updateVisibleTasks(filtered);
+  }
+
   private _getAllTasks(): void {
     this.isLoadingTasks.set(true);
 
     this._taskService
       .getAllTasks(this.taskStatusEnum.IN_PROGRESS, false)
       .pipe(takeUntil(this._destroy$))
-      .subscribe(
-        (tasks: TaskInterface[]): void => {
-          this.tasks.set(tasks);
+      .subscribe({
+        next: (tasks: TaskInterface[]) => {
+          this.allTasks.set(tasks);
+          this._filterTasks(); // сразу применяем фильтрацию + пагинацию
           this.isLoadingTasks.set(false);
 
           this._alertService
             .open('Tasks successfully loaded', { variant: 'success' })
             .subscribe();
         },
-
-        (): void => {
+        error: () => {
           this.isLoadingTasks.set(false);
           this._alertService
             .open('Failed to load tasks', { variant: 'error' })
             .subscribe();
-        }
-      );
+        },
+      });
   }
 
   private _listenTasksStatuses(): void {
     this._taskHelperService.createdTask$
       .pipe(takeUntil(this._destroy$))
-      .subscribe((task: TaskInterface): void => {
-        this.tasks.update((tasks: TaskInterface[] | null): TaskInterface[] => [
-          task,
-          ...(tasks || []),
-        ]);
+      .subscribe((task: TaskInterface) => {
+        this.allTasks.update((tasks) => [task, ...(tasks || [])]);
+        this._filterTasks();
       });
 
     this._taskHelperService.updatedTask$
       .pipe(takeUntil(this._destroy$))
-      .subscribe((task: TaskInterface): void => {
-        this.tasks.update((tasks: TaskInterface[] | null): TaskInterface[] => {
-          return (
-            tasks?.map(
-              (sourceTask: TaskInterface): TaskInterface =>
-                sourceTask._id === task._id ? task : sourceTask
-            ) || []
-          );
-        });
+      .subscribe((task: TaskInterface) => {
+        this.allTasks.update(
+          (tasks) => tasks?.map((t) => (t._id === task._id ? task : t)) || []
+        );
+        this._filterTasks();
       });
 
     this._taskHelperService.deletedTask$
       .pipe(takeUntil(this._destroy$))
-      .subscribe((task: TaskInterface): void => {
-        this.tasks.update((tasks: TaskInterface[] | null): TaskInterface[] => {
-          return (
-            tasks?.filter((sourceTask: TaskInterface) => {
-              return sourceTask._id !== task._id;
-            }) || []
-          );
-        });
+      .subscribe((task: TaskInterface) => {
+        this.allTasks.update(
+          (tasks) => tasks?.filter((t) => t._id !== task._id) || []
+        );
+        this._filterTasks();
       });
   }
 
-  // protected onLoadMore(): void {
-  //   const displayedTasks: TaskInterface[] | null = this.displayedTasks();
-  //   const tasks: TaskInterface[] | null = this.tasks();
+  protected onLoadMore(): void {
+    this.currentPage.update((p) => p + 1);
+    this._filterTasks(); // или _updateVisibleTasks() с текущим фильтром
+    console.log('visibleTasks now:', this.visibleTasks());
+  }
 
-  //   if (tasks && displayedTasks) {
-  //     const nextPage: number = this.currentPage() + 1;
-  //     const newTasks: TaskInterface[] = tasks.slice(
-  //       nextPage * this.tasksPerPage,
-  //       (nextPage + 1) * this.tasksPerPage
-  //     );
-
-  //     this.displayedTasks.set([...displayedTasks, ...newTasks]);
-  //     this.currentPage.set(nextPage);
-  //   }
-  // }
+  protected onSearchChange(query: string): void {
+    this.searchQuery.set(query);
+    this._filterTasks();
+  }
 
   ngOnInit(): void {
     this._getAllTasks();

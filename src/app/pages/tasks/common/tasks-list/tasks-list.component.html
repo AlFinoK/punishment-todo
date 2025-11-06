@@ -1,17 +1,15 @@
 <section class="tasks-list">
-  @for (task of localTasks(); track task._id) { @if(task.status !==
-  taskStatusEnum.DELETED) {
+  @for (task of filteredTasks(); track task._id) {
   <div
     dndDropzone
     [dndDraggable]="task"
     [dndEffectAllowed]="'move'"
     (dndDrop)="onTaskDrop($event, task)"
+    [class.deleted]="task.status === taskStatusEnum.DELETED"
   >
     <app-task-card [task]="task" />
   </div>
-  } @else {
-  <div>
-    <app-task-card [task]="task" />
-  </div>
-  } }
+  } @empty {
+  <div class="tasks-list__empty">No tasks</div>
+  }
 </section>

@@ -1,6 +1,11 @@
 <section class="search-filter">
-  <app-button class="btn" [variant]="'clear'">
+  <app-button class="btn" [variant]="'clear'" (click)="onClear()">
     <lucide-icon class="icon" name="search" />
   </app-button>
-  <app-input class="input" placeholder="Search" />
+
+  <app-input
+    class="input"
+    placeholder="Search"
+    (change)="onQueryInput($event)"
+  />
 </section>

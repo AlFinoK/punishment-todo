@@ -118,9 +118,20 @@ export class TaskFormComponent implements OnInit {
     });
   }
 
+  private _initFillForm(): void {
+    const task: TaskInterface | null = this.task();
+    if (!task) return;
+    this._fillForm(task);
+  }
+
   protected onSubmit(): void {
-    if (!this.task()?._id) this.onSubmitCreateTask();
-    this.onSubmitEditTask();
+    if (!this.form) return;
+
+    if (!!this.task()?._id) {
+      this.onSubmitEditTask();
+    } else {
+      this.onSubmitCreateTask();
+    }
   }
 
   protected onSubmitCreateTask(): void {
@@ -190,6 +201,6 @@ export class TaskFormComponent implements OnInit {
 
   ngOnInit(): void {
     this._initForm();
-    this.formTags;
+    this._initFillForm();
   }
 }

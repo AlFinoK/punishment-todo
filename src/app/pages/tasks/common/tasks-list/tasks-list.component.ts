@@ -1,17 +1,25 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  InputSignal,
+  WritableSignal,
+  signal,
   computed,
   input,
-  InputSignal,
-  linkedSignal,
-  Signal,
-  signal,
-  WritableSignal,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
 } from '@angular/core';
+import { Subject, takeUntil } from 'rxjs';
 import { DndModule, DndDropEvent } from 'ngx-drag-drop';
 
-import { TaskInterface, TaskStatusEnum } from '@modules/task-module';
+import {
+  TaskHelperService,
+  TaskInterface,
+  TaskStatusEnum,
+  TaskTagsInterface,
+} from '@modules/task-module';
 
 import { TaskCardComponent } from '../task-card';
 
@@ -22,36 +30,71 @@ import { TaskCardComponent } from '../task-card';
   imports: [TaskCardComponent, DndModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksListComponent {
+export class TasksListComponent implements OnInit, OnChanges, OnDestroy {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
+
+  /** Входящие задачи от родителя (MyTasksComponent) */
   public tasks: InputSignal<TaskInterface[]> = input<TaskInterface[]>([]);
 
-  protected localTasks: WritableSignal<TaskInterface[]> = linkedSignal(
-    (): TaskInterface[] => {
-      return this.tasks();
-    }
-  );
+  /** Локальная копия задач для Drag’n’Drop и фильтрации */
+  protected localTasks: WritableSignal<TaskInterface[]> = signal<
+    TaskInterface[]
+  >([]);
 
-  constructor() {}
+  /** Активные теги */
+  private activeTags: WritableSignal<TaskTagsInterface[]> = signal<
+    TaskTagsInterface[]
+  >([]);
+
+  private readonly _destroy$ = new Subject<void>();
+
+  /** Фильтрация */
+  protected filteredTasks = computed(() => {
+    const all = this.localTasks();
+    const tags = this.activeTags();
+    if (!tags.length) return all;
+
+    const tagValues = tags.map((t) => t.value);
+    return all.filter((task) =>
+      task.tags.some((tag) => tagValues.includes(tag))
+    );
+  });
+
+  constructor(private readonly _taskHelperService: TaskHelperService) {}
+
+  ngOnInit(): void {
+    this.localTasks.set(this.tasks());
+
+    this._taskHelperService.activeTags$
+      .pipe(takeUntil(this._destroy$))
+      .subscribe((tags) => this.activeTags.set(tags));
+  }
+
+  /** 🔹 Реакция на изменение входных задач */
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['tasks']) {
+      this.localTasks.set(this.tasks());
+    }
+  }
+
+  ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
 
   protected onTaskDrop(event: DndDropEvent, targetTask: TaskInterface): void {
-    const tasks: TaskInterface[] = [...this.localTasks()];
-    const draggedTask: TaskInterface = event.data;
-    if (!draggedTask) return;
+    const tasks = [...this.localTasks()];
+    const dragged = event.data as TaskInterface;
+    if (!dragged) return;
 
-    const fromIndex: number = tasks.findIndex(
-      (task: TaskInterface): boolean => task._id === draggedTask._id
-    );
+    const fromIndex = tasks.findIndex((t) => t._id === dragged._id);
     if (fromIndex !== -1) tasks.splice(fromIndex, 1);
 
     if (targetTask) {
-      const toIndex: number = tasks.findIndex(
-        (task: TaskInterface): boolean => task._id === targetTask._id
-      );
-
-      tasks.splice(toIndex, 0, draggedTask);
+      const toIndex = tasks.findIndex((t) => t._id === targetTask._id);
+      tasks.splice(toIndex, 0, dragged);
     } else {
-      tasks.push(draggedTask);
+      tasks.push(dragged);
     }
 
     this.localTasks.set(tasks);
