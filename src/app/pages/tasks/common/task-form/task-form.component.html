@@ -6,8 +6,9 @@
       label="Task Name"
       placeholder="Enter task name"
       formControlName="name"
+      size="sm"
     />
-    @if(form.get('name')?.touched && form.get('name')?.invalid){
+    @if(nameError){
     <div class="error">Task name is required</div>
     }
   </div>
@@ -16,7 +17,6 @@
     <label class="time-label">Time select</label>
     <div class="time-select-box">
       <dp-time-select />
-
       <lucide-icon class="icon" name="clock" />
     </div>
   </div>
@@ -40,7 +40,7 @@
 
       <lucide-icon class="icon" name="calendar" />
     </div>
-    @if(form.get('endDate')?.touched && form.get('name')?.invalid){
+    @if(endDateError){
     <div class="error">End date is required</div>
     }
   </div>
@@ -62,7 +62,7 @@
         [label]="tag.value | titlecase"
         [formControlName]="idx"
       />
-      } @if(form.get('tags')?.touched && form.get('name')?.invalid){
+      } @if(tagsError){
       <div class="error">Tags is required</div>
       }
     </div>

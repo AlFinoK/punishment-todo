@@ -10,26 +10,30 @@ body {
   color: $primary-color;
 }
 
+::-webkit-scrollbar {
+  width: 0;
+}
+
 .tasks-list-container {
   overflow-y: auto;
   max-height: 100%;
 
   scrollbar-width: thin;
-  scrollbar-color: #161d31 #161d31;
+  scrollbar-color: $bg $dashboard-bg;
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 8px !important;
   }
 
   &::-webkit-scrollbar-track {
-    background: #161d31;
+    background: $bg;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #161d31;
-    border-radius: 4px;
+    background-color: $bg;
+    border-radius: 6px;
     &:hover {
-      background-color: #161d31;
+      background-color: $bg;
     }
   }
 }

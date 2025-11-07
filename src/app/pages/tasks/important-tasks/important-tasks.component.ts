@@ -23,6 +23,7 @@ import {
 })
 export class ImportantTasksComponent {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
+  protected readonly itemsPerPage: number = 8;
 
   private _destroy$: Subject<void> = new Subject<void>();
 
@@ -33,8 +34,6 @@ export class ImportantTasksComponent {
   protected isLoadingTasks: WritableSignal<boolean> = signal<boolean>(false);
 
   protected currentPage: WritableSignal<number> = signal(1);
-  protected readonly itemsPerPage = 8;
-
   protected searchQuery: WritableSignal<string> = signal('');
 
   get totalItems(): number {

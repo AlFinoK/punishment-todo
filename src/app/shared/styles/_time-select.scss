@@ -3,3 +3,17 @@
 dp-time-select .dp-time-select-controls {
   background: transparent !important;
 }
+
+dp-time-select .dp-time-select-control {
+  letter-spacing: 0 !important;
+  width: max-content !important;
+}
+
+dp-time-select .dp-time-select-control-down:before,
+dp-time-select .dp-time-select-control-up:before {
+  border-color: $primary-color !important;
+}
+
+dp-time-select .dp-time-select-control-up:before {
+  top: 0px !important;
+}

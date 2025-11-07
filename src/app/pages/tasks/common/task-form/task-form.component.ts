@@ -10,6 +10,7 @@ import {
   input,
 } from '@angular/core';
 import {
+  AbstractControl,
   FormArray,
   FormBuilder,
   FormControl,
@@ -83,6 +84,33 @@ export class TaskFormComponent implements OnInit {
 
   get formTags(): FormArray {
     return this.form?.get('tags') as FormArray;
+  }
+
+  get nameError(): string | null {
+    const field: AbstractControl | null | undefined = this.form?.get('name');
+    if (!field?.errors || (!field.dirty && !field.touched)) return null;
+
+    if (field.errors['required']) return 'Task name is required';
+
+    return null;
+  }
+
+  get endDateError(): string | null {
+    const field: AbstractControl | null | undefined = this.form?.get('endDate');
+    if (!field?.errors || (!field.dirty && !field.touched)) return null;
+
+    if (field.errors['required']) return 'EndDate is required';
+
+    return null;
+  }
+
+  get tagsError(): string | null {
+    const field: AbstractControl | null | undefined = this.form?.get('tags');
+    if (!field?.errors || (!field.dirty && !field.touched)) return null;
+
+    if (field.errors['required']) return 'Tags is required';
+
+    return null;
   }
 
   constructor(

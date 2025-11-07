@@ -27,6 +27,7 @@ import { SearchFilterComponent, TasksListComponent } from '../common';
 })
 export class CompletedTasksComponent implements OnInit, OnDestroy {
   protected readonly taskStatusEnum: typeof TaskStatusEnum = TaskStatusEnum;
+  protected readonly itemsPerPage: number = 8;
 
   private _destroy$: Subject<void> = new Subject<void>();
 
@@ -35,8 +36,6 @@ export class CompletedTasksComponent implements OnInit, OnDestroy {
   protected isLoadingTasks: WritableSignal<boolean> = signal(false);
 
   protected currentPage: WritableSignal<number> = signal(1);
-  protected readonly itemsPerPage = 8;
-
   protected searchQuery: WritableSignal<string> = signal('');
 
   get totalItems(): number {
@@ -57,7 +56,7 @@ export class CompletedTasksComponent implements OnInit, OnDestroy {
 
   private _filterTasks(): void {
     const query: string = this.searchQuery().trim().toLowerCase();
-    const filtered = query
+    const filtered: TaskInterface[] = query
       ? this.completedTasks().filter((task: TaskInterface): boolean =>
           task.name.toLowerCase().includes(query)
         )
